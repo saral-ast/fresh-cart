@@ -14,6 +14,13 @@
             'description' => 'Free Shipping to First-Time Customers Only, After promotions and discounts are applied.',
             'link' => '/',
         ],
+        [
+            'image' => Vite::asset('resources/images/slider-3.jpg'),
+            'badge' => 'Free Shipping - orders over $100',
+            'title' => 'Free Shipping on orders over <span class="text-green-600">$100</span>',
+            'description' => 'Free Shipping to First-Time Customers Only, After promotions and discounts are applied.',
+            'link' => '/',
+        ]
     ];
 @endphp
 
