@@ -42,7 +42,7 @@ class SignInController extends Controller
             
             Auth::login($user);
             
-            return redirect('/')->with('success', 'Registration successful!');
+            return redirect('/');
             
    
     }

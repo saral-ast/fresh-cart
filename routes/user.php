@@ -1,5 +1,7 @@
 <?php
+use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\SignInController;
+use App\Http\Controllers\User\Category;
 use Illuminate\Support\Facades\Route;
 
 
@@ -7,25 +9,28 @@ use Illuminate\Support\Facades\Route;
 Route::middleware("guest:user")->group(function() {
     Route::get("register", [SignInController::class, 'create'])->name("user.signin");
     Route::post("register", [SignInController::class, 'store']);
+    Route::get("login", [LoginController::class, 'create'])->name("user.login");
+    Route::post("login", [LoginController::class, "store"]);
+
     // Route::post("login", [LoginController::class, "authenticate"])->name("customer.authenticate");
 });
 
-// Route::middleware("auth:customer")->group(function() {
-//     Route::get("logout", [LoginController::class, "logout"])->name("customer.logout");
-//     Route::get("/", [HomepageController::class, "index"])->name("homepage");
-// });
+Route::middleware("auth:user")->group(function() {
+    Route::post("logout", [LoginController::class, "destroy"])->name("user.logout");
+    Route::get('/cart', function () {
+        return view('cart');
+    });
+});
 Route::get('/', function () {
     return view('welcome');
-}); 
+})->name('home'); 
 // Route::get('/register', function () {
 //     return view('auth.register');
 // });
-Route::get('/login', function () {
-    return view('auth.login');
-});
-Route::get('/categories', function () {
-    return view('categories');
-});
+// Route::get('/login', function () {
+//     return view('auth.login');
+// });
+Route::get('/categories',[Category::class,'index']);
 Route::get('/contact', function () {
     return view('contact');
 });
@@ -46,7 +51,4 @@ Route::get('/product', function () {
         ]
     ];
     return view('product', ['product' => $product]);
-});
-Route::get('/cart', function () {
-    return view('cart');
 });

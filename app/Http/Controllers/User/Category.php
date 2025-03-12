@@ -1,19 +1,18 @@
 <?php
 
-namespace App\Http\Controllers\Auth;
+namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Validation\ValidationException;
-class LoginController extends Controller
+
+class Category extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        //
+        return view('categories');
     }
 
     /**
@@ -21,7 +20,7 @@ class LoginController extends Controller
      */
     public function create()
     {
-         return view('auth.login');
+        //
     }
 
     /**
@@ -29,17 +28,7 @@ class LoginController extends Controller
      */
     public function store(Request $request)
     {
-        $credentials = $request->validate([
-            'email' => ['required', 'email'],
-            'password' => ['required'],
-        ]);
-        if(!Auth::guard('user')->attempt($credentials)){
-            throw ValidationException::withMessages([
-                'email' => 'Your provided credentials could not be verified.',
-            ]);
-        }
-        $request->session()->regenerate();
-        return redirect()->route('home');
+        //
     }
 
     /**
@@ -69,9 +58,8 @@ class LoginController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy()
+    public function destroy(string $id)
     {
-        Auth::guard('user')->logout();
-        return redirect()->route('home');
+        //
     }
 }

@@ -1,6 +1,6 @@
 <?php
 
-namespace Illuminate\Auth\Middleware;
+namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Auth\AuthenticationException;
@@ -115,8 +115,9 @@ class Authenticate implements AuthenticatesRequests
     protected function redirectTo(Request $request,$guards)
     {
         //edit this line after creating routes for admin and customer
+        // dd($guards); 
         if(in_array("user", $guards)) {
-            return route("user.signin");
+            return route("user.login");
         } else if(in_array("admin", $guards)) {
             // return route("admin.login");
             //change it to uper

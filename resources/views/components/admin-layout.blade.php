@@ -3,7 +3,7 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>Laravel</title>
+        <title>Admin Dashboard - FreshCart</title>
 
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.bunny.net">
@@ -19,83 +19,84 @@
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>
 
-    <body class="bg-white">
+    <body class="bg-gray-50">
         <div class="flex">
             <!-- Sidebar -->
-            <aside class="w-72 bg-white h-screen shadow-sm fixed flex flex-col justify-between">
+            <aside class="w-72 bg-white h-screen shadow-sm fixed flex flex-col justify-between border-r border-gray-200">
                 <!-- Logo Section -->
                 <div>
-                    <div class="p-4 flex items-center space-x-2">
-                        <img src="{{ Vite::asset('resources/images/freshcart-logo.svg') }}" class="h-8 w-auto" alt="Logo">
+                    <div class="p-6 flex items-center space-x-2 border-b border-gray-200">
+                        <img src="{{ Vite::asset('resources/images/freshcart-logo.svg') }}" class="h-8 w-auto transition-transform duration-200 hover:scale-105" alt="Logo">
                     </div>
                     
-                    {{-- <!-- Search -->
-                    <div class="px-4">
-                        <input type="text" placeholder="Search" 
-                               class="w-full px-3 py-2 border rounded-md focus:ring-green-400 focus:border-green-400">
-                    </div> --}}
-                
                     <!-- Navigation -->
-                    <nav class="mt-4 px-4">
-                        <ul class="space-y-2">
+                    <nav class="mt-6 px-6">
+                        <ul class="space-y-4">
                             <li>
-                                <x-admin.nav-link href="/dashboard" :active="request()->is('dashboard')">
-                                    <i class="mdi mdi-view-dashboard mr-2"></i> Dashboard
+                                <x-admin.nav-link href="/dashboard" :active="request()->is('dashboard')" 
+                                    class="flex items-center px-4 py-3 text-gray-600 hover:text-green-600 hover:bg-green-50 rounded-lg transition-all duration-200">
+                                    <i class="mdi mdi-view-dashboard text-xl mr-3"></i> 
+                                    <span class="font-medium">Dashboard</span>
                                 </x-admin.nav-link>
                             </li>
 
-                            <p class="text-sm text-gray-500 mt-4">Store Managements</p>
+                            <div class="pt-4">
+                                <p class="px-4 text-xs font-semibold text-gray-400 uppercase tracking-wider">Store Management</p>
+                                <ul class="mt-4 space-y-3">
+                                    <li>
+                                        <x-admin.nav-link href="/dashboard/product" :active="request()->is('dashboard/product')"
+                                            class="flex items-center px-4 py-3 text-gray-600 hover:text-green-600 hover:bg-green-50 rounded-lg transition-all duration-200">
+                                            <i class="mdi mdi-shopping text-xl mr-3"></i>
+                                            <span class="font-medium">Products</span>
+                                        </x-admin.nav-link>                               
+                                    </li>
+                                    <li>
+                                        <x-admin.nav-link href="/dashboard/categories" :active="request()->is('dashboard/categories')"
+                                            class="flex items-center px-4 py-3 text-gray-600 hover:text-green-600 hover:bg-green-50 rounded-lg transition-all duration-200">
+                                            <i class="mdi mdi-shape text-xl mr-3"></i>
+                                            <span class="font-medium">Categories</span>
+                                        </x-admin.nav-link>
+                                    </li>
+                                    <li>
+                                        <x-admin.nav-link href="/dashboard/orders" :active="request()->is('dashboard/orders')"
+                                            class="flex items-center px-4 py-3 text-gray-600 hover:text-green-600 hover:bg-green-50 rounded-lg transition-all duration-200">
+                                            <i class="mdi mdi-cart text-xl mr-3"></i>
+                                            <span class="font-medium">Orders</span>
+                                        </x-admin.nav-link>
+                                    </li>
+                                </ul>
+                            </div>
 
-                            <li>
-                                <x-admin.nav-link href="/dashboard/product" :active="request()->is('dashboard/product')">
-                                    <i class="mdi mdi-shopping mr-2"></i> Products
-                                </x-admin.nav-link>                               
-                            </li>
-
-                            <li>
-                                <x-admin.nav-link href="/dashboard/categories" :active="request()->is('dashboard/categories')">
-                                    <i class="mdi mdi-format-list-bulleted mr-2"></i> Categories
-                                </x-admin.nav-link> 
-                            </li>
-
-                            <li>
-                                <x-admin.nav-link href="/dashboard/orders" :active="request()->is('dashboard/orders')">
-                                    <i class="mdi mdi-cart mr-2"></i> Orders
-                                </x-admin.nav-link> 
-                            </li>
-                            
-                            <li>
-                                <x-admin.nav-link href="/dashboard/customers" :active="request()->is('dashboard/customers')">
-                                    <i class="mdi mdi-account-group mr-2"></i> Customers
-                                </x-admin.nav-link> 
-                            </li>
+                            <div class="pt-4">
+                                <p class="px-4 text-xs font-semibold text-gray-400 uppercase tracking-wider">System</p>
+                                <ul class="mt-4 space-y-3">
+                                    <li>
+                                        <x-admin.nav-link href="/dashboard/settings" :active="request()->is('dashboard/settings')"
+                                            class="flex items-center px-4 py-3 text-gray-600 hover:text-green-600 hover:bg-green-50 rounded-lg transition-all duration-200">
+                                            <i class="mdi mdi-cog text-xl mr-3"></i>
+                                            <span class="font-medium">Settings</span>
+                                        </x-admin.nav-link>
+                                    </li>
+                                </ul>
+                            </div>
                         </ul>
                     </nav>
                 </div>
 
-                <!-- Logout & Profile -->
-                <div class="p-4">
-                    <div class="flex items-center space-x-2">
-                        <img src="https://avatars.dicebear.com/v2/initials/john-doe.svg" class="h-8 w-8 rounded-full" alt="User">
-                        <div>
-                            <p class="text-sm font-medium">John Doe</p>
-                            <p class="text-xs text-gray-500">Admin</p>
-                        </div>
-                    </div>
-                    <div class="mt-4 space-y-2">
-                        <x-admin.nav-link href="/profile" :active="request()->is('profile')">
-                            <i class="mdi mdi-account-circle mr-2"></i> Profile
-                        </x-admin.nav-link>
-                        
-                        <x-admin.nav-link href="/logout" :active="request()->is('logout')" class="text-red-600">
-                            <i class="mdi mdi-logout mr-2"></i> Logout
-                        </x-admin.nav-link>
-                    </div>
+                <!-- Bottom Section -->
+                <div class="p-6 border-t border-gray-200">
+                    <form action="/logout" method="POST">
+                        @csrf
+                        <button type="submit" class="w-full flex items-center justify-center px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg transition duration-200 font-medium text-sm shadow-sm hover:shadow-md">
+                            <i class="mdi mdi-logout text-lg mr-2"></i>
+                            <span>Logout</span>
+                        </button>
+                    </form>
                 </div>
             </aside>
 
             <!-- Main Content -->
-            <main class="ml-72 w-full p-6">
+            <main class="flex-1 ml-72 min-h-screen bg-gray-50 p-8">
                 {{ $slot }}
             </main>
         </div>

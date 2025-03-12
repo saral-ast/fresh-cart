@@ -1,6 +1,6 @@
 <?php
 
-namespace Illuminate\Auth\Middleware;
+namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
@@ -25,10 +25,9 @@ class RedirectIfAuthenticated
     public function handle(Request $request, Closure $next, string ...$guards): Response
     {
         $guards = empty($guards) ? [null] : $guards;
-
         foreach ($guards as $guard) {
             if (Auth::guard($guard)->check()) {
-                return redirect($this->redirectTo($request,$guards));
+                return redirect($this->redirectTo($request, $guards));
             }
         }
 
@@ -38,18 +37,14 @@ class RedirectIfAuthenticated
     /**
      * Get the path the user should be redirected to when they are authenticated.
      */
-    protected function redirectTo(Request $request,$guards): ?string
+    protected function redirectTo(Request $request, $guards) 
     {
-        //edit this line after creating and routes for admin and customer
-
+        
         if(in_array("user", $guards)) {
-            return '/'; // Redirect to home page after user login
-        } else if(in_array("admin", $guards)) {
-            return '/admin/dashboard'; // Redirect to admin dashboard
+            return route("home");
+        } else if( in_array("admin", $guards)) {
+            return route("dashboard.index");
         }
-
-
-
         // return static::$redirectToCallback
         //     ? call_user_func(static::$redirectToCallback, $request)
         //     : $this->defaultRedirectUri();

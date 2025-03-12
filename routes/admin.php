@@ -56,7 +56,7 @@ Route::get('/dashboard', function () {
     
     return view('dashboard.index', compact('orders'));
     
-});
+})->name('dashboard.index');
 
 Route::get('/dashboard/product', function () {
     $products = collect([

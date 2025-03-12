@@ -1,14 +1,14 @@
+@props(['active' => false])
+
 @php
-    $class = 'flex text-lg hover:text-green-600 font-bold';
+    $class = 'inline-flex items-center transition-colors duration-200';
 
     if ($active) {
-        $class .= ' text-green-600';
+        $class .= ' text-green-600 font-medium';
     } else {
-        $class .= ' text-gray-900';
+        $class .= ' text-gray-600 hover:text-green-600 font-medium';
     }
 @endphp
-
-@props(['active' => false])
 
 <a {{ $attributes->merge(['class' => $class]) }}>
     {{ $slot }}

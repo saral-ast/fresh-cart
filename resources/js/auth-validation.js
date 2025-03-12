@@ -62,4 +62,39 @@ $(document).ready(function() {
             form.submit();
         }
     });
+    $('#login-form').validate({
+        rules: {
+            email: {
+                required: true,
+                email: true,
+            },
+            password: {
+                required: true,
+                minlength: 6,
+            }
+        },
+        messages: {
+            email: {
+                required: 'Please enter your email',
+                email: 'Please enter a valid email',
+            },
+            password: {
+                required: 'Please enter your password',
+                minlength: 'Password must be at least 6 characters',
+            }
+        },
+        errorPlacement: function(error, element) { // Fixed function usage
+            error.addClass('text-red-500');
+            error.insertAfter(element);
+        },
+        highlight: function(element) {
+            $(element).addClass('is-invalid');
+        },
+        unhighlight: function(element) {
+            $(element).removeClass('is-invalid').addClass('is-valid');
+        },
+        submitHandler: function(form) {
+            form.submit();
+        }
+    });
 });
