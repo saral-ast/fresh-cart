@@ -45,13 +45,7 @@ $products = [
         'price' => 18,
         'image' => Vite::asset('resources/images/products/product-img-1.jpg'), // Change to your actual image path
         'discount' => 'Sale',
-    ], [
-        'name' => "Haldiram's Sev Bhujia",
-        'category' => 'Snack & Munchies',
-        'price' => 18,
-        'image' => Vite::asset('resources/images/products/product-img-1.jpg'), // Change to your actual image path
-        'discount' => 'Sale',
-    ],
+    ], 
     // Add more products if needed
 ];
 @endphp

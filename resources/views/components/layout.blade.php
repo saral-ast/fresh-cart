@@ -30,8 +30,9 @@
                     <!-- Desktop Menu -->
                     <div class="flex space-x-6">
                         <x-nav-link href="/" :active="request()->is('/')">Home</x-nav-link>
-                        <x-nav-link href="/contact" :active="request()->is('/contact')">Contact</x-nav-link>
-                        <x-nav-link href="/product" :active="request()->is('/product')">Product</x-nav-link>       
+                        <x-nav-link href="/contact" :active="request()->is('contact')">Contact</x-nav-link>
+                        <x-nav-link href="/products" :active="request()->is('products')">Product</x-nav-link>  
+                        <x-nav-link href="/categories" :active="request()->is('categories')">Categories</x-nav-link>
                     </div>
                     
                     <!-- Icons (Cart & Account) -->
