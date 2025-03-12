@@ -1,4 +1,4 @@
-@props(['label', 'name','placeholder'])
+@props(['label', 'name', 'placeholder' => ''])
 
 @php
     $defaults = [
@@ -10,7 +10,6 @@
                     focus:ring-green-500 focus:border-green-500 placeholder-gray-400 shadow-sm 
                     transition duration-200 ease-in-out',
         'value' => old($name)
-
     ];
 @endphp
 
