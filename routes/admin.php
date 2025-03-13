@@ -1,62 +1,103 @@
 <?php
 
+use App\Http\Controllers\Admin\CategoryController;
+use App\Http\Controllers\Auth\AdminLoginController;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
-// Route::prefix("admin")->group(function() {
 
-//     Route::middleware("guest:admin")->group(function() {
-//         Route::get("login", [AdminLoginController::class, "index"])->name("admin.login");
-//         Route::post("login", [AdminLoginController::class, "authenticate"])->name("admin.authenticate");
-//     });
+Route::prefix("admin")->group(function() {
 
-//     Route::middleware("auth:admin")->group(function() {
-//         Route::get("/", [DashboardController::class, "index"])->name("admin.dashboard");
-//         Route::get("logout", [AdminLoginController::class, "logout"])->name("admin.logout");
-//     });
+    Route::middleware("guest:admin")->group(function() {
+        Route::get('/login',[AdminLoginController::class,'create'])->name('admin.login');
+        Route::post('/login',[AdminLoginController::class,'store'])->name('admin.authenticate');
+        // Route::get("login", [AdminLoginController::class, "index"])->name("admin.login");
+        // Route::post("login", [AdminLoginController::class, "authenticate"])->name("admin.authenticate");
+    });
 
+    Route::middleware("auth:admin")->group(function() {
+        Route::get('/dashboard', function () {
+            $orders = collect([
+                (object) [
+                    'order_number' => '#FC0005',
+                    'product_name' => "Haldiram's Sev Bhujia",
+                    'order_date' => '28 March 2023',
+                    'price' => 18.00,
+                    'status' => 'Shipped',
+                ],
+                (object) [
+                    'order_number' => '#FC0004',
+                    'product_name' => 'NutriChoice Digestive',
+                    'order_date' => '24 March 2023',
+                    'price' => 24.00,
+                    'status' => 'Pending',
+                ],
+                (object) [
+                    'order_number' => '#FC0003',
+                    'product_name' => 'Onion Flavour Potato',
+                    'order_date' => '8 Feb 2023',
+                    'price' => 9.00,
+                    'status' => 'Cancel',
+                ],
+                (object) [
+                    'order_number' => '#FC0002',
+                    'product_name' => 'Blueberry Greek Yogurt',
+                    'order_date' => '20 Jan 2023',
+                    'price' => 12.00,
+                    'status' => 'Pending',
+                ],
+                (object) [
+                    'order_number' => '#FC0001',
+                    'product_name' => 'Slurrp Millet Chocolate',
+                    'order_date' => '14 Jan 2023',
+                    'price' => 8.00,
+                    'status' => 'Processing',
+                ],
+            ]);
+            
+            return view('dashboard.index', compact('orders'));
+            
+        })->name('dashboard.index');
+        
+        // Route::get("/", [DashboardController::class, "index"])->name("admin.dashboard");
+        Route::post("logout", [AdminLoginController::class, "destroy"])->name("admin.logout");
+        Route::get('/categories',[CategoryController::class,'index'])->name('admin.categories');
+        Route::get('/categories/create',[CategoryController::class,'create'])->name('admin.categories.create');
+        Route::post('/categories',[CategoryController::class,'store'])->name('admin.categories.store');
+        Route::get('/categories/{slug}/edit',[CategoryController::class,'edit'])->name('admin.categories.edit');
+        Route::put('/categories/{id}',[CategoryController::class,'update'])->name('admin.categories.update');
+        Route::delete('/categories/{id}',[CategoryController::class,'destroy'])->name('admin.categories.destroy');
+        // Route::get('/categories', function () { 
+        //     $categories = collect([
+        //         (object) [
+        //             'icon' => 'https://cdn-icons-png.flaticon.com/128/2921/2921822.png',
+        //             'name' => 'Organic Vegetables',
+        //             'type' => 'Grocery',
+        //             'status' => 'Published'
+        //         ],
+        //         (object) [
+        //             'icon' => 'https://cdn-icons-png.flaticon.com/128/2921/2921826.png',
+        //             'name' => 'Dairy Products',
+        //             'type' => 'Dairy',
+        //             'status' => 'Published'
+        //         ],
+        //         (object) [
+        //             'icon' => 'https://cdn-icons-png.flaticon.com/128/2921/2921833.png',
+        //             'name' => 'Frozen Foods',
+        //             'type' => 'Frozen',
+        //             'status' => 'Unpublished'
+        //         ]
+        //     ]);
+        
+        //     return view('dashboard.categories', compact('categories'));
+        // });
+    });
+
+});
+// Route::get('/admin/login', function () {
+//     return view('auth.admin-login');
 // });
-Route::get('/dashboard', function () {
-    $orders = collect([
-        (object) [
-            'order_number' => '#FC0005',
-            'product_name' => "Haldiram's Sev Bhujia",
-            'order_date' => '28 March 2023',
-            'price' => 18.00,
-            'status' => 'Shipped',
-        ],
-        (object) [
-            'order_number' => '#FC0004',
-            'product_name' => 'NutriChoice Digestive',
-            'order_date' => '24 March 2023',
-            'price' => 24.00,
-            'status' => 'Pending',
-        ],
-        (object) [
-            'order_number' => '#FC0003',
-            'product_name' => 'Onion Flavour Potato',
-            'order_date' => '8 Feb 2023',
-            'price' => 9.00,
-            'status' => 'Cancel',
-        ],
-        (object) [
-            'order_number' => '#FC0002',
-            'product_name' => 'Blueberry Greek Yogurt',
-            'order_date' => '20 Jan 2023',
-            'price' => 12.00,
-            'status' => 'Pending',
-        ],
-        (object) [
-            'order_number' => '#FC0001',
-            'product_name' => 'Slurrp Millet Chocolate',
-            'order_date' => '14 Jan 2023',
-            'price' => 8.00,
-            'status' => 'Processing',
-        ],
-    ]);
-    
-    return view('dashboard.index', compact('orders'));
-    
-})->name('dashboard.index');
 
 Route::get('/dashboard/product', function () {
     $products = collect([
@@ -74,30 +115,7 @@ Route::get('/dashboard/product', function () {
     return view('dashboard.product', compact('products'));
 });
 
-Route::get('/dashboard/categories', function () { 
-    $categories = collect([
-        (object) [
-            'icon' => 'https://cdn-icons-png.flaticon.com/128/2921/2921822.png',
-            'name' => 'Organic Vegetables',
-            'type' => 'Grocery',
-            'status' => 'Published'
-        ],
-        (object) [
-            'icon' => 'https://cdn-icons-png.flaticon.com/128/2921/2921826.png',
-            'name' => 'Dairy Products',
-            'type' => 'Dairy',
-            'status' => 'Published'
-        ],
-        (object) [
-            'icon' => 'https://cdn-icons-png.flaticon.com/128/2921/2921833.png',
-            'name' => 'Frozen Foods',
-            'type' => 'Frozen',
-            'status' => 'Unpublished'
-        ]
-    ]);
 
-    return view('dashboard.categories', compact('categories'));
-});
 Route::get('/dashboard/orders', function () { 
     $orders = collect([
         (object) [
@@ -178,4 +196,8 @@ Route::get('/dashboard/customers', function () {
 
     return view('dashboard.customers', compact('customers'));
 
+});
+Route::get('/admin/generate-slug', function (Request $request) {
+    $slug = Str::slug($request->name);
+    return response()->json(['slug' => $slug]);
 });

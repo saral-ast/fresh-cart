@@ -33,7 +33,7 @@
 
                     <!-- Icons (Cart & Account) -->
                     <div class="flex items-center space-x-4">
-                        @auth
+                        @auth('user')
                         <div class="relative group">
                             <a href="#" class="flex items-center space-x-1 p-2  rounded-lg transition-colors duration-200">
                                 <svg class="w-5 h-5 text-gray-600 group-hover:text-green-600 transition-colors duration-200" 
@@ -65,7 +65,7 @@
                             </button>
                         </form>
                         @endauth
-                        @guest
+                        @guest('user')
                         <div class="hidden md:flex md:items-center md:space-x-4">
                             <x-nav-link href="/login" :active="request()->is('login')"
                                 class="px-4 py-2 text-green-600 hover:text-green-700 font-medium transition-colors duration-200">Login</x-nav-link>
@@ -96,7 +96,7 @@
                             class="block px-3 py-2 rounded-md text-base font-medium text-gray-600 hover:text-green-600 hover:bg-gray-100 transition-colors duration-200">Products</x-nav-link>
                         <x-nav-link href="/categories" :active="request()->is('categories')"
                             class="block px-3 py-2 rounded-md text-base font-medium text-gray-600 hover:text-green-600 hover:bg-gray-100 transition-colors duration-200">Categories</x-nav-link>
-                        @auth
+                        @auth('user')
                         <form action="/logout" method="POST" class="mt-4">
                             @csrf
                             <button class="w-full flex items-center justify-center space-x-2 px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg transition duration-200 ease-in-out font-medium text-sm">
@@ -107,7 +107,7 @@
                             </button>
                         </form>
                         @endauth
-                        @guest
+                        @guest('user')
                         <div class="mt-4 space-y-2">
                             <x-nav-link href="/login" :active="request()->is('login')"
                                 class="block w-full px-4 py-2 text-center text-green-600 hover:text-green-700 font-medium transition-colors duration-200">Login</x-nav-link>
