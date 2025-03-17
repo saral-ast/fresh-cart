@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('name');
             $table->string('email')->unique();
             $table->string('password');
+            $table->enum('status', ['active', 'inactive', 'banned'])->default('active');
             // $table->rememberToken();
             $table->string('phone',10)->nullable();
             $table->timestamps();

@@ -5,14 +5,12 @@ namespace App\Models\Admin;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Category extends Model
+class Product extends Model
 {
-    /** @use HasFactory<\Database\Factories\Admin\CategoryFactory> */
+    /** @use HasFactory<\Database\Factories\Admin\ProductFactory> */
     use HasFactory;
     protected $guarded = [];
-
-    public function products(){
-        return $this->hasMany(Product::class);
+    public function category(){
+        return $this->belongsTo(Category::class);
     }
-    
 }

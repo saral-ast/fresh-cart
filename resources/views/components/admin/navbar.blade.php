@@ -20,7 +20,7 @@
                     <p class="px-4 text-xs font-semibold text-gray-400 uppercase tracking-wider">Store Management</p>
                     <ul class="mt-4 space-y-3">
                         <li>
-                            <x-admin.nav-link href="/dashboard/product" :active="request()->is('admin/product')"
+                            <x-admin.nav-link href="/admin/products" :active="request()->is('admin/products')"
                                 class="flex items-center px-4 py-3 text-gray-600 hover:text-green-600 hover:bg-green-50 rounded-lg transition-all duration-200">
                                 <i class="mdi mdi-shopping text-xl mr-3"></i>
                                 <span class="font-medium">Products</span>
@@ -41,7 +41,7 @@
                             </x-admin.nav-link>
                         </li>
                         <li>
-                            <x-admin.nav-link href="/dashboard/customers" :active="request()->is('admin/orders')"
+                            <x-admin.nav-link href="/admin/customers" :active="request()->is('admin/customers')"
                                 class="flex items-center px-4 py-3 text-gray-600 hover:text-green-600 hover:bg-green-50 rounded-lg transition-all duration-200">
                                 <i class="mdi mdi-account-group text-xl mr-3"></i>
                                 <span class="font-medium">Customers</span>

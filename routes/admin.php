@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\Admin\CategoryController;
+use App\Http\Controllers\Admin\CustomerController;
+use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Auth\AdminLoginController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
@@ -66,32 +68,23 @@ Route::prefix("admin")->group(function() {
         Route::get('/categories/create',[CategoryController::class,'create'])->name('admin.categories.create');
         Route::post('/categories',[CategoryController::class,'store'])->name('admin.categories.store');
         Route::get('/categories/{slug}/edit',[CategoryController::class,'edit'])->name('admin.categories.edit');
-        Route::put('/categories/{id}',[CategoryController::class,'update'])->name('admin.categories.update');
-        Route::delete('/categories/{id}',[CategoryController::class,'destroy'])->name('admin.categories.destroy');
-        // Route::get('/categories', function () { 
-        //     $categories = collect([
-        //         (object) [
-        //             'icon' => 'https://cdn-icons-png.flaticon.com/128/2921/2921822.png',
-        //             'name' => 'Organic Vegetables',
-        //             'type' => 'Grocery',
-        //             'status' => 'Published'
-        //         ],
-        //         (object) [
-        //             'icon' => 'https://cdn-icons-png.flaticon.com/128/2921/2921826.png',
-        //             'name' => 'Dairy Products',
-        //             'type' => 'Dairy',
-        //             'status' => 'Published'
-        //         ],
-        //         (object) [
-        //             'icon' => 'https://cdn-icons-png.flaticon.com/128/2921/2921833.png',
-        //             'name' => 'Frozen Foods',
-        //             'type' => 'Frozen',
-        //             'status' => 'Unpublished'
-        //         ]
-        //     ]);
-        
-        //     return view('dashboard.categories', compact('categories'));
-        // });
+        Route::patch('/categories/{category}',[CategoryController::class,'update'])->name('admin.categories.update');
+        Route::delete('/categories/{category}',[CategoryController::class,'destroy'])->name('admin.categories.destroy');
+
+        //product
+        Route::get('/products',[ProductController::class,'index'])->name('admin.product.index');
+        Route::get('/product/create', [ProductController::class,'create'])->name('admin.product.create');
+        Route::post('/product', [ProductController::class,'store'])->name('admin.product.store');
+        Route::get('/products/{slug}/edit',[ProductController::class,'edit'])->name('admin.product.edit');
+        Route::patch('/products/{product}',[ProductController::class,'update'])->name('admin.product.update');  
+        Route::delete('/products/{product}',[ProductController::class,'destroy'])->name('admin.product.destroy');
+
+        Route::get('/customers',[CustomerController::class,'index'])->name('admin.customers');
+        Route::get('/customer/create',[CustomerController::class,'create'])->name('admin.customers.create');
+        Route::post('/customer',[CustomerController::class,'store'])->name('admin.customers.store');
+        Route::get('/customers/{customer}/edit',[CustomerController::class,'edit'])->name('admin.customers.edit');
+        Route::patch('/customers/{customer}',[CustomerController::class,'update'])->name('admin.customers.update');
+        Route::delete('/customers/{customer}',[CustomerController::class,'destroy'])->name('admin.customers.destroy');
     });
 
 });
@@ -99,21 +92,7 @@ Route::prefix("admin")->group(function() {
 //     return view('auth.admin-login');
 // });
 
-Route::get('/dashboard/product', function () {
-    $products = collect([
-        (object) [
-            'product_id' => '#P0001',
-            'name' => "Haldiram's Sev Bhujia",
-            'category' => "Snack & Munchies",
-            'price' => 18.00,
-            'status' => 'Active',
-            'added_on' => '24 Nov 2022',
-            'image' => Vite::asset('resources/images/products/product-img-1.jpg'),   
-        ],
-            ]);
-    
-    return view('dashboard.product', compact('products'));
-});
+
 
 
 Route::get('/dashboard/orders', function () { 
@@ -158,45 +137,7 @@ Route::get('/dashboard/orders', function () {
 
     return view('dashboard.orders', compact('orders'));
 });
-Route::get('/dashboard/customers', function () {
-    $customers = collect([
-        (object) [
-            'name' => 'Bonnie Howe',
-            'email' => 'bonniehowe@gmail.com',
-            'purchase_date' => '2023-05-17 15:18:00',
-            'phone' => null,
-            'spent' => 49.00,
-            'avatar' => 'https://i.pravatar.cc/40?u=bonniehowe@gmail.com'
-        ],
-        (object) [
-            'name' => 'Judy Nelson',
-            'email' => 'judynelson@gmail.com',
-            'purchase_date' => '2023-04-27 14:47:00',
-            'phone' => '435-239-6436',
-            'spent' => 490.00,
-            'avatar' => 'https://i.pravatar.cc/40?u=judynelson@gmail.com'
-        ],
-        (object) [
-            'name' => 'John Mattox',
-            'email' => 'johnmattox@gmail.com',
-            'purchase_date' => '2023-04-27 14:47:00',
-            'phone' => '347-424-9526',
-            'spent' => 29.00,
-            'avatar' => 'https://i.pravatar.cc/40?u=johnmattox@gmail.com'
-        ],
-        (object) [
-            'name' => 'Wayne Rossman',
-            'email' => 'waynerossman@gmail.com',
-            'purchase_date' => '2023-04-27 14:47:00',
-            'phone' => null,
-            'spent' => 39.00,
-            'avatar' => 'https://i.pravatar.cc/40?u=waynerossman@gmail.com'
-        ],
-    ]);
 
-    return view('dashboard.customers', compact('customers'));
-
-});
 Route::get('/admin/generate-slug', function (Request $request) {
     $slug = Str::slug($request->name);
     return response()->json(['slug' => $slug]);

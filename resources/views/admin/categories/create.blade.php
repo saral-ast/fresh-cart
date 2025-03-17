@@ -11,6 +11,13 @@
                     <x-forms.input label="Category Name" name="name" type="text" placeholder="Enter category name" id="categoryName" />
                     <x-forms.input label="Slug" name="slug" type="text" placeholder="Auto Generated Slug" id="categorySlug" />
 
+                    <x-forms.field label="Featured" name="featured">
+                        <label class="inline-flex items-center">
+                            <input type="checkbox" name="featured" class="form-checkbox h-5 w-5 text-green-600" value="1">
+                            <span class="ml-2 text-gray-700">Mark as featured category</span>
+                        </label>
+                    </x-forms.field>
+
                     <!-- Category Image Upload with Preview -->
                     <x-forms.field label="Category Image" name="image">
                         <label class="block w-full cursor-pointer">
@@ -38,7 +45,7 @@
                 </p>
             </x-forms.form>
         </div>
-    </div>
+</div>
 
     <!-- jQuery for Image Preview & Filename -->
 
@@ -63,7 +70,6 @@
                         $("#categorySlug").val(""); // Clear slug if input is empty
                     }
                 });
-
                 
                 $('#create-catagory').validate({
                     rules: {

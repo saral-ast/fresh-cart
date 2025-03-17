@@ -2,6 +2,7 @@
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\SignInController;
 use App\Http\Controllers\User\Category;
+use App\Http\Controllers\User\HomeController;
 use Illuminate\Support\Facades\Route;
 
 
@@ -21,9 +22,7 @@ Route::middleware("auth:user")->group(function() {
         return view('cart');
     });
 });
-Route::get('/', function () {
-    return view('welcome');
-})->name('home'); 
+Route::get('/', [HomeController::class,'index'] )->name('home'); 
 // Route::get('/register', function () {
 //     return view('auth.register');
 // });

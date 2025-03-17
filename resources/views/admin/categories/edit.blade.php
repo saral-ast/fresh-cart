@@ -7,7 +7,7 @@
 
             <x-forms.form method="POST" action="{{ route('admin.categories.update', $category->id) }}" enctype="multipart/form-data" id="edit-category">
                 @csrf
-                @method('PUT')
+                @method('PATCH')
 
                 <div class="space-y-4">
                     <!-- Category Name -->
@@ -15,6 +15,13 @@
 
                     <!-- Slug -->
                     <x-forms.input label="Slug" name="slug" type="text" placeholder="Enter category slug" value="{{ old('slug', $category->slug) }}" id="categorySlug" />
+
+                    <x-forms.field label="Featured" name="featured">
+                        <label class="inline-flex items-center">
+                            <input type="checkbox" name="featured" class="form-checkbox h-5 w-5 text-green-600" value="1" {{ $category->featured ? 'checked' : '' }}>
+                            <span class="ml-2 text-gray-700">Mark as featured category</span>
+                        </label>
+                    </x-forms.field>
 
                     <!-- Category Image Upload with Preview -->
                     <x-forms.field label="Category Image" name="image">

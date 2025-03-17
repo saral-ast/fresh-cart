@@ -1,4 +1,4 @@
-@php
+{{-- @php
 $products = [
     [
         'name' => "Haldiram's Sev Bhujia",
@@ -48,10 +48,10 @@ $products = [
     ], 
     // Add more products if needed
 ];
-@endphp
-
+@endphp --}}
+@props(['products'=>$featuredProducts])
 <section class="bg-white py-2 antialiased">
-    <div class="mx-auto max-w-screen-xl px-4 2xl:px-0">
+    <div class="mx-auto max-w-screen-xl px-4 2xl:px-0 mb-4">
         <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
             @foreach ($products as $product)
                 <div class="relative rounded-lg  border-gray-200 bg-white p-4 shadow-sm border  hover:border-green-400 hover:shadow-2xl transition-all duration-400">
@@ -59,14 +59,14 @@ $products = [
                     <!-- Product Image -->
                     <div class="h-56 w-full flex justify-center items-center">
                         <a href="#">
-                            <img class="h-full object-contain hover:scale-110 transition-all duration-300" src="{{ $product['image'] }}" alt="{{ $product['name'] }}" />
+                            <img class="h-full object-contain hover:scale-110 transition-all duration-300" src="{{ asset('storage/' . $product['image']) }}" alt="{{ $product['name'] }}" />
                         </a>
                     </div>
 
                     <!-- Product Details -->
                     <div class="pt-4">
-                        <p class="text-sm text-gray-500">{{ $product['category'] }}</p>
-                        <a href="#" class="text-lg font-semibold leading-tight text-gray-900 hover:underline">{{ $product['name'] }}</a>
+                        <p class="text-sm text-gray-500">{{ $product->category->name }}</p>
+                        <a href="#" class="text-lg font-semibold leading-tight text-gray-900 hover:underline">{{ $product->name }}</a>
 
                         <!-- Pricing & Add Button -->
                         <div class="mt-4 flex items-center justify-between">
@@ -81,6 +81,9 @@ $products = [
                     </div>
                 </div>
             @endforeach
+        
         </div>
+     
     </div>
+    {{ $products->links() }}
 </section>

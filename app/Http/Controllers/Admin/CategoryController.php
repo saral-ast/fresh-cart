@@ -14,9 +14,10 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        $categories = Category::latest()->simplePaginate(10);
+       
+        $categories = Category::all(); 
         // dd($categories);
-        return view('admin.categories.index',['categories' => $categories]);
+        return view('admin.categories.index',['categories'=> $categories]);
     }
     public function create()
     {
@@ -36,8 +37,10 @@ class CategoryController extends Controller
         $category = [
             'name' => $request->name,
             'slug' => $request->slug,
+            'featured' => $request->featured ? true : false,
         ];
         $category['image'] = $request->image->store('categories','public');
+        // dd($category);
         Category::create($category);
         return redirect('admin/categories');
         // return redirect()->route('admin.categories.index');
@@ -58,24 +61,26 @@ class CategoryController extends Controller
     public function edit($slug)
     {
         $category = Category::where('slug', $slug)->first();
+        
         return view('admin.categories.edit',['category'=> $category]);
     }
 
     /**
      * Update the resource in storage.
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Category $category)
     {
+        // dd($category);
         $request->validate([
-            'slug' =>'required|unique:categories,slug,'.$id,
+            'slug' =>'required|unique:categories,slug,'.$category->id,
         ]);
-        $category = Category::find($id);
         $oldImagePath = $category->image;
         $newPath = $request->image ? $request->image->store('categories','public') : $oldImagePath;
         $category->update([
             'name' => request('name'),
             'slug' => request('slug'),
             'image' => $newPath,
+            'featured' => request('featured')? true : false,
         ]);
 
         if($oldImagePath !== $newPath){
@@ -87,14 +92,11 @@ class CategoryController extends Controller
     /**
      * Remove the resource from storage.
      */
-    public function destroy($slug)
-    {
-        $category = Category::where('slug', $slug)->firstOrFail();
-        
+    public function destroy(Category $category)
+    { 
         if ($category->image) {
             Storage::disk('public')->delete($category->image);
-        }
-        
+        }   
         $category->delete();
         
         return redirect('admin/categories')->with('success', 'Category deleted successfully');
