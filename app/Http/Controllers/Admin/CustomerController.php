@@ -13,7 +13,7 @@ class CustomerController extends Controller
      * Show the form for creating the resource.
      */
     public function index(Request $request){
-        $customers = User::all();
+        $customers = User::latest()->paginate(5);
         // dd($customers);
         return view('admin.customer.index', ['customers' => $customers]);
     }

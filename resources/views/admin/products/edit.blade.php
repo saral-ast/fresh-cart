@@ -65,7 +65,7 @@
                 </x-forms.button>
 
                 <p class="text-sm text-gray-600 mt-3 text-center">
-                    <a href="/admin/products" class="text-green-600 hover:underline"><- Back to Products</a>
+                    <a href="{{ route('admin.product.index') }}" class="text-green-600 hover:underline"><- Back to Products</a>
                 </p>
             </x-forms.form>
         </div>

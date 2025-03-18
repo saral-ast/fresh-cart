@@ -4,9 +4,9 @@
         <h2 class="text-3xl font-semibold mb-6 text-gray-800">Products</h2>
 
         <!-- Search and Add Category Button -->
-        <div class="flex justify-between items-center bg-white p-4 rounded-lg shadow-md">
+        <div class="flex justify-between items-center">
             <div class="flex items-center space-x-4">
-                <select id="featuredFilter" class="px-4 py-2 text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors duration-200">
+                <select id="featuredFilter" class="px-8 py-2 text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors duration-200">
                     <option value="all">All Products</option>
                     <option value="featured">Featured Only</option>
                     <option value="unfeatured">Unfeatured Only</option>
@@ -56,15 +56,16 @@
                                 @endif
                             </td>
                             <td class="p-4 text-gray-500">{{ $product->created_at->format('d M Y h:i A') }}</td>
-                            <td class="p-4 text-center space-x-4">
-                                <a href="{{ route('admin.product.edit', $product->slug) }}" 
-                                   class="bg-blue-500 hover:bg-blue-700 text-white font-medium px-4 py-2 rounded-lg transition">
+                            <td class="p-4 text-center">
+                                <a href="{{ route('admin.product.edit', $product->id) }}" 
+                                   class="text-blue-600 hover:text-blue-800 font-medium">
                                     Edit
                                 </a>
+                                <span class="mx-2 text-gray-400">|</span>
                                 <button data-modal-target="popup-modal" 
                                         data-modal-toggle="popup-modal" 
                                         type="button" 
-                                        class="bg-red-500 hover:bg-red-700 text-white font-medium px-4 py-2 rounded-lg transition"
+                                        class="text-red-600 hover:text-red-800 font-medium"
                                         data-product-id="{{ $product->id }}">
                                     Delete
                                 </button>
@@ -77,7 +78,12 @@
                     @endforelse
                 </tbody>
             </table>
+            
         </div>
+        <div class="mt-6">
+            {{ $products->links() }}
+        </div>
+        
     </div>
 
     <div id="popup-modal" tabindex="-1" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
@@ -111,7 +117,6 @@
         </div>
     </div>
     @push('scripts')
-    <script src="{{ asset('js/featured-filter.js') }}"></script>
     <script>
     $(document).ready(function () {
         $('button[data-modal-toggle="popup-modal"]').click(function() {
@@ -120,19 +125,26 @@
             const action = form.attr('action');
             form.attr('action', `${action}/${productId}`);
         });
-        $('#toggleProductFeatured').on('click', function() {
-            const rows = $('.product-row');
-            const button = $(this);
-            const isShowingAll = !button.data('showing-featured');
+        $('#featuredFilter').on('change', function() {
+        const filterValue = $(this).val();
+        const rows = $('.product-row');
 
             rows.each(function() {
-                const isFeatured = $(this).data('featured') === 'true';
-                $(this).toggle(isShowingAll || isFeatured);
+                const featuredAttr = $(this).data('featured');
+                const isFeatured = featuredAttr === true || featuredAttr === 'true';
+                
+                switch(filterValue) {
+                    case 'featured':
+                        $(this).toggle(isFeatured);
+                        break;
+                    case 'unfeatured':
+                        $(this).toggle(!isFeatured);
+                        break;
+                    default: // 'all'
+                        $(this).show();
+                        break;
+                }
             });
-
-            button.data('showing-featured', isShowingAll);
-            button.find('span:not(.material-icons)').text(isShowingAll ? 'Show All' : 'Show Featured');
-            button.toggleClass('bg-yellow-100', isShowingAll);
         });
     });
     </script>

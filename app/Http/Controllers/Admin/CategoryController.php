@@ -15,7 +15,7 @@ class CategoryController extends Controller
     public function index()
     {
        
-        $categories = Category::all(); 
+        $categories = Category::latest()->paginate(5);
         // dd($categories);
         return view('admin.categories.index',['categories'=> $categories]);
     }
@@ -50,18 +50,11 @@ class CategoryController extends Controller
     /**
      * Display the resource.
      */
-    public function show()
-    {
-        //
-    }
-
     /**
      * Show the form for editing the resource.
      */
-    public function edit($slug)
-    {
-        $category = Category::where('slug', $slug)->first();
-        
+    public function edit(Category $category)
+    { 
         return view('admin.categories.edit',['category'=> $category]);
     }
 

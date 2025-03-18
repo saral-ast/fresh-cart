@@ -16,7 +16,7 @@ class ProductController extends Controller
      */
     public function index(Request $request){
         
-        $products = Product::with('category')->get();
+        $products = Product::latest()->with('category')->paginate(5);
         return view('admin.products.index',['products'=> $products]);
     }
     public function create() 
@@ -59,9 +59,9 @@ class ProductController extends Controller
     /**
      * Show the form for editing the resource.
      */
-    public function edit($slug)
+    public function edit(Product $product)
     {
-        $product = Product::where('slug', $slug)->with('category')->first();
+        // $product = Product::where('slug', $slug)->with('category')->first();
         $categories = Category::all();
         // dd($categories);    
         return view('admin.products.edit',['product'=> $product,'categories'=> $categories]);

@@ -67,7 +67,7 @@ Route::prefix("admin")->group(function() {
         Route::get('/categories',[CategoryController::class,'index'])->name('admin.categories');
         Route::get('/categories/create',[CategoryController::class,'create'])->name('admin.categories.create');
         Route::post('/categories',[CategoryController::class,'store'])->name('admin.categories.store');
-        Route::get('/categories/{slug}/edit',[CategoryController::class,'edit'])->name('admin.categories.edit');
+        Route::get('/categories/{category}/edit',[CategoryController::class,'edit'])->name('admin.categories.edit');
         Route::patch('/categories/{category}',[CategoryController::class,'update'])->name('admin.categories.update');
         Route::delete('/categories/{category}',[CategoryController::class,'destroy'])->name('admin.categories.destroy');
 
@@ -75,7 +75,7 @@ Route::prefix("admin")->group(function() {
         Route::get('/products',[ProductController::class,'index'])->name('admin.product.index');
         Route::get('/product/create', [ProductController::class,'create'])->name('admin.product.create');
         Route::post('/product', [ProductController::class,'store'])->name('admin.product.store');
-        Route::get('/products/{slug}/edit',[ProductController::class,'edit'])->name('admin.product.edit');
+        Route::get('/products/{product}/edit',[ProductController::class,'edit'])->name('admin.product.edit');
         Route::patch('/products/{product}',[ProductController::class,'update'])->name('admin.product.update');  
         Route::delete('/products/{product}',[ProductController::class,'destroy'])->name('admin.product.destroy');
 

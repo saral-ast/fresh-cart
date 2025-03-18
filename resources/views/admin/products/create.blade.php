@@ -5,7 +5,7 @@
                 Add New Product
             </h1>
 
-            <x-forms.form method="POST" action="/admin/product" enctype="multipart/form-data" id="create-product">
+            <x-forms.form method="POST" action="{{ route('admin.product.store') }}" enctype="multipart/form-data" id="create-product">
                 @csrf
                 <div class="space-y-4">
                     <x-forms.input label="Product Name" name="name" type="text" placeholder="Enter product name" id="productName" />
@@ -58,7 +58,7 @@
                 </x-forms.button>
 
                 <p class="text-sm text-gray-600 mt-3 text-center">
-                    <a href="/admin/products" class="text-green-600 hover:underline"><- Back to Products</a>
+                    <a href="{{ route('admin.product.index') }}" class="text-green-600 hover:underline"><- Back to Products</a>
                 </p>
             </x-forms.form>
         </div>

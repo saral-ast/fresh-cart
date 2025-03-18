@@ -5,7 +5,7 @@
                 Add New Customer
             </h1>
 
-            <x-forms.form method="POST" action="/admin/customer" id="create-customer">
+            <x-forms.form method="POST" action="{{ route('admin.customers.store') }}" id="create-customer">
                 @csrf
                 <div class="space-y-4">
                     <x-forms.input label="Name" name="name" type="text" placeholder="Enter customer name" id="customerName" />
@@ -27,6 +27,9 @@
                     Add Customer
                 </x-forms.button>
             </x-forms.form>
+            <p class="text-sm text-gray-600 mt-3 text-center">
+                <a href="{{ route('admin.customers') }}" class="text-green-600 hover:underline"><- Back to Customers</a>
+            </p>
         </div>
     </div>
 

@@ -2,11 +2,18 @@
     <section class="p-6 md:p-12 antialiased">
         <div class="mx-auto max-w-screen-xl px-4">
             <h2 class="text-2xl font-bold text-gray-900">Customers</h2>
-            
+        
             {{-- Title & Add Button --}}
-            <div class="flex justify-between items-center mb-6">
-               
-                <p class="text-gray-500">Total Customers: {{ $customers->count() }}</p>
+            <div class="flex justify-between items-center mb-6 mt-3">
+
+                <select id="customerStatus" class="px-8 py-2 text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors duration-200">
+                    <option value="all">All</option>
+                    <option value="active">Active</option>
+                    <option value="inactive">Inactive</option>
+                </select>
+            
+                {{-- <p class="text-gray-500">Total Customers: {{ $customers->count() }}</p> --}}
+                
                 <a href="{{ route('admin.customers.create') }}" 
                     class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg shadow-md transition-all">
                     + Add New Customer
@@ -30,7 +37,7 @@
                     </thead>
                     <tbody>
                         @foreach ($customers as $customer)
-                            <tr class="border-b border-gray-200 hover:bg-gray-50 transition py-10">
+                            <tr class="border-b border-gray-200 hover:bg-gray-50 transition py-10 customer-row" data-status="{{ $customer->status }}">
                                 <td class="px-6 py-6 font-medium">{{ $customer->name }}</td>
                                 <td class="px-6 py-6">{{ $customer->email }}</td>
                                 <td class="px-6 py-6">{{ $customer->phone ?? '-' }}</td>
@@ -45,7 +52,7 @@
                                     <a href="{{ route('admin.customers.edit', $customer->id) }}" 
                                         class="text-blue-600 hover:text-blue-800 font-medium">Edit</a>
                                     <span class="mx-2 text-gray-400">|</span>
-                                   <button type="button" data-modal-target="popup-modal" data-modal-toggle="popup-modal" class="text-red-600 hover:text-red-800 font-medium" data-customer-id="{{ $customer->id }}">Delete</button>
+                                <button type="button" data-modal-target="popup-modal" data-modal-toggle="popup-modal" class="text-red-600 hover:text-red-800 font-medium" data-customer-id="{{ $customer->id }}">Delete</button>
                                 </td>
                             </tr>
                         @endforeach
@@ -54,9 +61,10 @@
             </div>
 
             {{-- Pagination --}}
-            {{-- <div class="mt-6">
+            <div class="mt-6">
                 {{ $customers->links() }}
-            </div> --}}
+            </div>
+                
         </div>
     </section>
     <div id="popup-modal" tabindex="-1" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
@@ -97,6 +105,18 @@
         const form = $('#deleteCustomerForm');
         const action = form.attr('action');
         form.attr('action', `${action}/${customerId}`);
+    });
+    $('#customerStatus').on('change', function() {
+        const filterValue = $(this).val();
+        const rows = $('.customer-row');
+        rows.each(function() {
+            const status = $(this).data('status');
+            if (filterValue === 'all' || status === filterValue) {
+                $(this).show();
+            } else {
+                $(this).hide();
+            }
+        });
     });
 });
 </script>

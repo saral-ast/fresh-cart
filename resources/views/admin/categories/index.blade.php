@@ -4,9 +4,9 @@
         <h2 class="text-2xl font-bold text-gray-800">Categories</h2>
 
         <!-- Search and Add Category Button -->
-        <div class="flex justify-between items-center bg-white p-4 rounded-lg shadow">
+        <div class="flex justify-between items-center p-4">
             <div class="flex items-center space-x-4">
-                <select id="categoryFeaturedFilter" class="px-4 py-2 text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors duration-200">
+                <select id="categoryFeaturedFilter" class="px-8 py-2 text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors duration-200">
                     <option value="all">All Categories</option>
                     <option value="featured">Featured</option>
                     <option value="unfeatured">Non-Featured</option>
@@ -57,15 +57,16 @@
                                 </td>
                                 <td class="px-6 py-3">{{ $category->created_at->format('d M Y h:i A') }}</td>
                                 <td class="px-6 py-3 text-center space-x-4">
-                                    <a href="{{ route('admin.categories.edit', $category->slug) }}" class="text-blue-500 hover:underline">Edit</a>
-                                    <button data-modal-target="popup-modal" data-modal-toggle="popup-modal" class="text-red-500 hover:underline" data-category-id="{{ $category->id }}">Delete</button>
+                                <a href="{{ route('admin.categories.edit', $category->id) }}" class="text-blue-600 hover:text-blue-800 font-medium">Edit</a>
+                                    <span class="mx-2 text-gray-400">|</span>
+                                    <button data-modal-target="popup-modal" data-modal-toggle="popup-modal" class="text-red-600 hover:text-red-800 font-medium" data-category-id="{{ $category->id }}">Delete</button>
                                 </td>
                             </tr>
                         @endforeach
                     </tbody>
                 </table>
             </div>
-      
+            {{$categories->links()}}
     </div>
 
     <!-- Delete Confirmation Modal -->
@@ -109,6 +110,7 @@
                 const form = $('#deleteCategoryForm');
                 form.attr('action', "{{ route('admin.categories.destroy', '') }}/" + categoryId);
             });
+            //filter 
             $('#categoryFeaturedFilter').on('change', function() {
                 const filterValue = $(this).val();
                 const rows = $('.category-row');
