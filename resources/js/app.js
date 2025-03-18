@@ -1,5 +1,6 @@
 import './bootstrap';
 import './auth-validation';
-import './category';
-
+import './image-preview';
+import './cart';
+// import './cart-notification';
 

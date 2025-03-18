@@ -5,7 +5,14 @@
     <section class="py-8">
         <div class="container mx-auto px-4">
             <x-small-heading>Featured Catagories</x-small-heading>
-            <x-featured-catagory :$featuredCategories/>
+            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
+            @foreach ($featuredCategories as $featuredCategory)
+            <a href="{{ route('user.category.show', $featuredCategory->slug) }}">
+                <x-catagory-card :category="$featuredCategory" />
+            </a>
+            @endforeach
+            </div>
+           
         </div>
     </section>
 
@@ -41,7 +48,17 @@
     <section>
         <div class="container mx-auto px-4">
             <x-small-heading>Featured Products</x-small-heading>
-            <x-product-card :$featuredProducts/>
+            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-4 gap-4">
+                @foreach ($featuredProducts as $featuredProduct)
+                {{-- <a href="{{ route('user.product.show', $featuredProduct->slug) }}"> --}}
+                    <x-product-card :product="$featuredProduct" />
+
+                @endforeach
+            </div>
+            {{-- <x-product-card :products="$featuredProducts" /> --}}
+            <div class="mt-6">
+                {{ $featuredProducts->links() }}
+            </div>
         </div>
         </div>
     </section>

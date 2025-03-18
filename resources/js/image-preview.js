@@ -1,5 +1,4 @@
 $(document).ready(function () {
-
     $("#imageInput").on("change", function() {
         const file = this.files[0];
         if (file) {
@@ -12,6 +11,4 @@ $(document).ready(function () {
             reader.readAsDataURL(file);
         }
     });
-    
 });
-

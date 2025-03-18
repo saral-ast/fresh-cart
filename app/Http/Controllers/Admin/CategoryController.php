@@ -42,7 +42,7 @@ class CategoryController extends Controller
         $category['image'] = $request->image->store('categories','public');
         // dd($category);
         Category::create($category);
-        return redirect('admin/categories');
+        return redirect()->route('admin.categories')->with('success','Category created successfully');
         // return redirect()->route('admin.categories.index');
         // dd($category);
     }
@@ -79,7 +79,7 @@ class CategoryController extends Controller
         if($oldImagePath !== $newPath){
             Storage::disk('public')->delete($oldImagePath);
         }        
-        return redirect('admin/categories');
+        return redirect()->route('admin.categories')->with('success','Category updated successfully');
     }
 
     /**

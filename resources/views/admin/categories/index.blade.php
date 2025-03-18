@@ -102,13 +102,18 @@
     
 
     @push('scripts')
-    <script src="{{ asset('js/featured-filter.js') }}"></script>
+    {{-- <script src="{{ asset('js/featured-filter.js') }}"></script> --}}
     <script>
         $(document).ready(function () {
-            $('.text-red-500[data-modal-toggle="popup-modal"]').click(function() {
+            
+
+            $('button[data-modal-toggle="popup-modal"]').click(function() {
+                console.log('clicked');
                 const categoryId = $(this).data('category-id');
-                const form = $('#deleteCategoryForm');
-                form.attr('action', "{{ route('admin.categories.destroy', '') }}/" + categoryId);
+                const form = $('#deleteCategoryForm');        
+                const action = form.attr('action');
+                form.attr('action', `${action}/${categoryId}`);
+                // form.attr('action', `${action}/${categoryId}`);
             });
             //filter 
             $('#categoryFeaturedFilter').on('change', function() {

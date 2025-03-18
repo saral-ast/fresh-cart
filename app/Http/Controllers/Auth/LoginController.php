@@ -46,7 +46,7 @@ class LoginController extends Controller
                 'email' => 'Your provided credentials could not be verified.',
             ]);
         }
-        $request->session()->regenerate();
+        $request->session()->invalidate();
         return redirect()->route('home');
     }
 
@@ -80,6 +80,7 @@ class LoginController extends Controller
     public function destroy()
     {
         Auth::guard('user')->logout();
+        
         return redirect()->route('home');
     }
 }

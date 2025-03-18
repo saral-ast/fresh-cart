@@ -33,6 +33,30 @@
         </div>
 
         <script src="https://cdn.jsdelivr.net/npm/flowbite@3.1.2/dist/flowbite.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        <script>
+            @if(session('success'))
+                    const Toast = Swal.mixin({
+                            toast: true,
+                            position: 'top-end',
+                            showConfirmButton: false,
+                            timer: 3000,
+                            timerProgressBar: true
+                        });
+
+                        Toast.fire({
+                            icon: 'success',
+                            title: '{{ session('success') }}'
+                        });
+                @elseif(session('error'))
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error!',
+                        text: "{{ session('error') }}",
+                        showConfirmButton: true
+                    });
+                @endif
+        </script>
         @stack('scripts')
     </body>
 </html>

@@ -7,7 +7,17 @@
                 <!-- Cart Items -->
                 <div class="md:col-span-2">
                     <div class="space-y-4">
-                        <x-product-item/>
+                      @if (isset($cart) && count($cart) > 0)
+                     
+                          @foreach ($cart as $item)
+                              <x-product-item :item="$item"/>
+                              
+                          @endforeach
+                            {{-- <x-product-item/> --}}
+                      @else
+                        <p class="text-gray-600">Your cart is empty.</p>
+                      @endif
+                        
                       
                     </div>
                 </div>
@@ -17,15 +27,15 @@
                     <h3 class="text-xl font-semibold text-gray-900 mb-4">Order Summary</h3>
                     <div class="flex justify-between mb-3">
                         <span class="text-gray-600">Subtotal</span>
-                        <span class="font-semibold text-gray-900">$9.48</span>
+                        {{-- <span class="font-semibold text-gray-900">${{ $total }}</span> --}}
                     </div>
                     <div class="flex justify-between mb-3">
                         <span class="text-gray-600">Tax</span>
-                        <span class="font-semibold text-gray-900">$0.95</span>
+                        {{-- <span class="font-semibold text-gray-900">${{$tax = 0.1* $total}}</span> --}}
                     </div>
                     <div class="flex justify-between border-t pt-3">
                         <span class="text-lg font-semibold text-gray-900">Total</span>
-                        <span class="text-lg font-semibold text-gray-900">$10.43</span>
+                        {{-- <span class="text-lg font-semibold text-gray-900">${{ $total + $tax }}</span> --}}
                     </div>
                     <button class="mt-4 w-full bg-green-600 text-white py-2 rounded-lg hover:bg-green-700 transition font-medium">
                         Proceed to Checkout

@@ -101,7 +101,6 @@
                     </svg>
                     <h3 class="mb-5 text-lg font-normal text-gray-500">Are you sure you want to delete this Product?</h3>
                     <form action="{{ route('admin.product.destroy', '') }}" method="POST" class="inline-block ml-3" id="deleteProductForm">
-
                           @csrf
                           @method('DELETE')
                           <button type="submit" class="text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center">
@@ -125,6 +124,7 @@
             const action = form.attr('action');
             form.attr('action', `${action}/${productId}`);
         });
+
         $('#featuredFilter').on('change', function() {
         const filterValue = $(this).val();
         const rows = $('.product-row');

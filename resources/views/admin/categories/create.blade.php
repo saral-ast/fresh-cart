@@ -70,7 +70,7 @@
                         $("#categorySlug").val(""); // Clear slug if input is empty
                     }
                 });
-                
+
                 $('#create-catagory').validate({
                     rules: {
                         name: {

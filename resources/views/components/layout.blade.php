@@ -34,26 +34,22 @@
                     <!-- Icons (Cart & Account) -->
                     <div class="flex items-center space-x-4">
                         @auth('user')
-                        <div class="relative group">
-                            <a href="#" class="flex items-center space-x-1 p-2  rounded-lg transition-colors duration-200">
-                                <svg class="w-5 h-5 text-gray-600 group-hover:text-green-600 transition-colors duration-200" 
-                                     fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
-                                          d="M5 4h1.5L9 16m0 0h8m-8 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm8 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm-8.5-3h9.25L19 7H7.312"/>
-                                </svg>
-                                <span class="hidden sm:inline text-gray-600 group-hover:text-green-600 transition-colors duration-200">Cart</span>
-                            </a>
-                        </div>
-                        <div class="relative group">
-                            <a href="#" class="flex items-center space-x-1 p-2  rounded-lg transition-colors duration-200">
-                                <svg class="w-5 h-5 text-gray-600 group-hover:text-green-600 transition-colors duration-200" 
-                                     fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-width="2" 
-                                          d="M7 17v1a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1v-1a3 3 0 0 0-3-3h-4a3 3 0 0 0-3 3Zm8-9a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"/>
-                                </svg>
-                                <span class="hidden sm:inline text-gray-600 group-hover:text-green-600 transition-colors duration-200">Account</span>
-                            </a>
-                        </div>
+                        <x-nav-link href="{{ route('cart.show') }}" :active="request()->is('cart')" class="flex items-center space-x-1 p-2 rounded-lg transition-colors duration-200">
+                            <svg class="w-5 h-5 text-gray-600 group-hover:text-green-600 transition-colors duration-200" 
+                                 fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                                      d="M5 4h1.5L9 16m0 0h8m-8 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm8 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm-8.5-3h9.25L19 7H7.312"/>
+                            </svg>
+                            <span class="hidden sm:inline">Cart</span>
+                        </x-nav-link>
+                        <x-nav-link href="/account" :active="request()->is('account')" class="flex items-center space-x-1 p-2 rounded-lg transition-colors duration-200">
+                            <svg class="w-5 h-5 text-gray-600 group-hover:text-green-600 transition-colors duration-200" 
+                                 fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-width="2" 
+                                      d="M7 17v1a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1v-1a3 3 0 0 0-3-3h-4a3 3 0 0 0-3 3Zm8-9a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"/>
+                            </svg>
+                            <span class="hidden sm:inline">Account</span>
+                        </x-nav-link>
                         <form action="/logout" method="POST" class="hidden md:block">
                             @csrf
                             <button class="flex items-center space-x-2 px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg transition duration-200 ease-in-out font-medium text-sm shadow-sm hover:shadow-md">
@@ -173,6 +169,8 @@
         </footer>
 
         <script src="https://cdn.jsdelivr.net/npm/flowbite@3.1.2/dist/flowbite.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
         <script>
             // Mobile menu toggle
             document.querySelector('[aria-controls="mobile-menu"]').addEventListener('click', function() {
@@ -191,28 +189,7 @@
                 }
             });
 
-            // Initialize dropdowns for cart and account
-            const dropdownButtons = document.querySelectorAll('.group > a');
-            dropdownButtons.forEach(button => {
-                button.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    const dropdown = button.nextElementSibling;
-                    if (dropdown && dropdown.classList.contains('dropdown-menu')) {
-                        dropdown.classList.toggle('hidden');
-                    }
-                });
-            });
-
-            // Close dropdowns when clicking outside
-            document.addEventListener('click', (e) => {
-                if (!e.target.closest('.group')) {
-                    document.querySelectorAll('.dropdown-menu').forEach(menu => {
-                        if (!menu.classList.contains('hidden')) {
-                            menu.classList.add('hidden');
-                        }
-                    });
-                }
-            });
+           
         </script>
     </body>
 </html>

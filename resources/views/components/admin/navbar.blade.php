@@ -2,7 +2,9 @@
     <!-- Logo Section -->
     <div>
         <div class="p-6 flex items-center space-x-2 border-b border-gray-200">
-            <img src="{{ Vite::asset('resources/images/freshcart-logo.svg') }}" class="h-8 w-auto transition-transform duration-200 hover:scale-105" alt="Logo">
+            <a href="{{ route('home') }}">
+                <img src="{{ Vite::asset('resources/images/freshcart-logo.svg') }}" class="h-8 w-auto transition-transform duration-200 hover:scale-105" alt="Logo">
+            </a>
         </div>
         
         <!-- Navigation -->

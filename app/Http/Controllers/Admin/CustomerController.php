@@ -41,7 +41,7 @@ class CustomerController extends Controller
         ];
         // dd($customer);
         User::create($customer);
-        return redirect()->route('admin.customers');
+        return redirect()->route('admin.customers')->with('success','Customer created successfully');
     }
 
     /**
@@ -72,7 +72,7 @@ class CustomerController extends Controller
             'phone' => request('phone'),
             'status' => request('status'),
         ]);
-        return redirect()->route('admin.customers');   
+        return redirect()->route('admin.customers')->with('success','Customer updated successfully');   
     }
 
     /**
@@ -82,6 +82,6 @@ class CustomerController extends Controller
     {
         // dd($customer);
         $customer->delete();
-        return redirect()->route('admin.customers');
+        return redirect()->route('admin.customers')->with('success','Customer deleted successfully');
     }
 }

@@ -3,22 +3,17 @@
 namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
-use App\Models\Admin\Category;
 use App\Models\Admin\Product;
 use Illuminate\Http\Request;
-use Illumiate\Database\Eloquent\Collection;
 
-class HomeController extends Controller
+class ProductController extends Controller
 {
     /**
      * Show the form for creating the resource.
      */
     public function index(){
-        $featuredCategories = Category::where('featured', true)->get();
-        $categories = Category::all();
-        $featuredProducts = Product::where('featured', true)->paginate(4);
-        
-        return view("user.home",['featuredCategories' => $featuredCategories, 'categories' => $categories, 'featuredProducts' => $featuredProducts]);
+        $products = Product::latest("id")->paginate(8);
+        return view('user.product.index',['products'=>$products]);
     }
     public function create(): never
     {
@@ -36,9 +31,12 @@ class HomeController extends Controller
     /**
      * Display the resource.
      */
-    public function show()
+    public function show($slug)
     {
-        //
+        // dd($slug);
+        $product = Product::where('slug',$slug)->with('category')->first();
+        $relatedProducts =  Product::where('category_id',$product->category_id)->where('id','!=',$product->id)->latest()->get();
+        return view('user.product.show',['product'=>$product,'relatedProducts'=>$relatedProducts]);
     }
 
     /**

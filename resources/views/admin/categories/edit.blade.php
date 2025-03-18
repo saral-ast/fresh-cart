@@ -78,7 +78,7 @@
                         $("#categorySlug").val(""); // Clear slug if input is empty
                     }
                 });
-
+               
                 
                 $('#edit-category').validate({
                     rules: {

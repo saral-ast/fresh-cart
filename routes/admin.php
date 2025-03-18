@@ -64,6 +64,7 @@ Route::prefix("admin")->group(function() {
         
         // Route::get("/", [DashboardController::class, "index"])->name("admin.dashboard");
         Route::post("logout", [AdminLoginController::class, "destroy"])->name("admin.logout");
+        
         Route::get('/categories',[CategoryController::class,'index'])->name('admin.categories');
         Route::get('/categories/create',[CategoryController::class,'create'])->name('admin.categories.create');
         Route::post('/categories',[CategoryController::class,'store'])->name('admin.categories.store');

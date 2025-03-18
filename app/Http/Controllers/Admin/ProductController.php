@@ -45,7 +45,7 @@ class ProductController extends Controller
        ];
        $product['image'] = $request->image->store('products','public');
        Product::create($product);
-       return redirect('admin/products');
+       return redirect()->route('admin.product.index')->with('success', 'Product created successfully');
     }
 
     /**
@@ -90,7 +90,7 @@ class ProductController extends Controller
         if($oldImagePath!== $newPath){
             Storage::disk('public')->delete($oldImagePath);
         }
-        return redirect('admin/products');
+        return redirect()->route('admin.product.index')->with('success','Product updated successfully');
         // dd($product);
     }
 
@@ -104,6 +104,6 @@ class ProductController extends Controller
             Storage::disk('public')->delete($product->image);
         }
         $product->delete();
-        return redirect('admin/products')->with('success', 'Product deleted successfully');
+        return redirect()->route('admin.product.index')->with('success', 'Product deleted successfully');
     }
 }
