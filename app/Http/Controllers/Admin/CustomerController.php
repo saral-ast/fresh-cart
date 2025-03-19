@@ -10,7 +10,7 @@ use Illuminate\Http\Request;
 class CustomerController extends Controller
 {
     /**
-     * Show the form for creating the resource.
+     * Show the form for creating the resource. 
      */
     public function index(Request $request){
         $customers = User::latest()->paginate(5);

@@ -1,36 +1,79 @@
-
 @props(['item'])
-<div class="flex items-center justify-between border-b pb-4">
-    <label for="counter-input" class="sr-only">Choose quantity:</label>
 
-    <div class="flex items-center space-x-4">
-        <img src="{{ asset('storage/' . $item['image']) }}" class="w-20 h-20 rounded-lg object-cover" alt="Product">
-        <div>
-            <h3 class="text-lg font-semibold text-gray-900">{{$item['name']}}</h3>
-            <p class="text-gray-500">{{$item['description']}}</p>
-            <p class="text-gray-900 font-semibold">${{$item['price']}}</p>
-        </div>
+<div class="grid grid-cols-12 items-center gap-4 border-b border-gray-300 py-4 px-6 relative shadow" id="cart-item-{{ $item['slug'] }}">
+    
+    <!-- Product Image -->
+    <div class="col-span-2 flex justify-center">
+        <img src="{{ asset('storage/' . $item['image']) }}" class="w-24 h-24 rounded-lg object-cover shadow-md" alt="{{ $item['name'] }}">
+    </div>
+
+    <!-- Product Details -->
+    <div class="col-span-4">
+        <h3 class="font-semibold text-gray-900 text-lg">{{ $item['name'] }}</h3>
+        <p class="text-gray-500 text-sm truncate">{{ $item['description'] }}</p>
+    </div>
+
+    <!-- Product Price -->
+    <div class="col-span-2 text-center">
+        <p class="text-gray-700 text-sm">Price</p>
+        <p class="text-gray-900 font-bold">${{ number_format($item['price'], 2) }}</p>
     </div>
 
     <!-- Quantity Controls -->
-    <div class="flex items-center space-x-2">
-        <button type="button" id="decrement-button-2" data-input-counter-decrement="counter-input-2" class="inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-md border border-gray-300 bg-gray-100 hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-100">
-            <svg class="h-2.5 w-2.5 text-gray-900" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 2">
-              <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 1h16" />
+    <div class="col-span-2 flex items-center justify-center space-x-2">
+        <form action="{{ route('cart.update') }}" class=".update-form" method="POST">
+            @csrf
+            <button type="button" class="decrement-button w-8 h-8 flex items-center justify-center rounded-md border border-gray-300 bg-gray-100 hover:bg-gray-200 transition"
+            data-slug="{{ $item['slug'] }}">
+            <svg class="w-4 h-4 text-gray-900" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 2">
+              <path stroke="currentColor" stroke-linecap="round" stroke-width="2" d="M1 1h16" />
             </svg>
-          </button>
-          <input type="text" id="counter-input-2" data-input-counter class="w-10 shrink-0 border-0 bg-transparent text-center text-sm font-medium text-gray-900 focus:outline-none focus:ring-0 " placeholder="" value="{{ $item['quantity'] }}" required />
-            <button type="button" id="increment-button-2" data-input-counter-increment="counter-input-2" class="inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-md border border-gray-300 bg-gray-100 hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-100">
-        <svg class="h-2.5 w-2.5 text-gray-900" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 18">
-            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 1v16M1 9h16" />
-        </svg>
-        </div>
+        </button>
+        </form>
+        
 
-    <!-- Remove Button -->
-    <button type="button" class="inline-flex items-center text-sm font-medium text-red-600 hover:underline dark:text-red-500">
-        <svg class="me-1.5 h-5 w-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
-          <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18 17.94 6M18 18 6.06 6" />
-        </svg>
-        Remove
-      </button>
+        <input type="text" id="counter-input-{{ $item['slug'] }}" class="w-10 text-center border border-gray-300 rounded-md bg-white text-gray-900 text-sm font-semibold focus:ring-2 focus:ring-gray-200"
+            value="{{ $item['quantity'] }}" required readonly />
+        <form action="{{ route('cart.update') }}" class=".update-form" method="POST">
+            @csrf
+            <button type="button" class="increment-button w-8 h-8 flex items-center justify-center rounded-md border border-gray-300 bg-gray-100 hover:bg-gray-200 transition"
+            data-slug="{{ $item['slug'] }}">
+            <svg class="w-4 h-4 text-gray-900" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 18">
+                <path stroke="currentColor" stroke-linecap="round" stroke-width="2" d="M9 1v16M1 9h16" />
+            </svg>
+        </button>
+        </form>
+        
+    </div>
+
+    <!-- Total Price -->
+    <div class="col-span-2 text-center">
+        <p class="text-gray-700 text-sm">Total</p>
+        <p class="text-gray-900 font-bold" id="product-total-{{ $item['slug'] }}">${{ number_format($item['price'] * $item['quantity'], 2) }}</p>
+    </div>
+    @php
+       $slug = $item['slug'];
+    @endphp
+    <!-- Remove Button (Moved to Right Corner) -->
+    <div class="absolute top-2 right-2">
+      <form action="{{ route('cart.remove', $slug) }}" class = 'remove-item-form' method="POST" data-item-id="{{ $item['slug'] }}"> 
+        @csrf
+        @method('DELETE')
+        <button type="submit" class="remove-item flex items-center justify-center w-8 h-8 rounded-full hover:bg-red-50 transition-colors duration-200" data-slug="{{ $item['slug'] }}">
+            <svg class="w-5 h-5 text-red-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <path stroke="currentColor" stroke-linecap="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+        </button>
+      </form>
+      {{-- <button type="button" class="remove-item flex items-center justify-center w-8 h-8 rounded-full hover:bg-red-50 transition-colors duration-200" 
+    data-slug="{{ $item['slug'] }}">
+    <svg class="w-5 h-5 text-red-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+        <path stroke="currentColor" stroke-linecap="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+    </svg>
+</button> --}}
+
+
+    </div>
+
 </div>
+

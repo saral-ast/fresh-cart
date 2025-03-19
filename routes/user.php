@@ -14,8 +14,6 @@ Route::middleware("guest:user")->group(function() {
     Route::post("register", [SignInController::class, 'store']);
     Route::get("login", [LoginController::class, 'create'])->name("user.login");
     Route::post("login", [LoginController::class, "store"]);
-   
-
     // Route::post("login", [LoginController::class, "authenticate"])->name("customer.authenticate");
 });
 
@@ -23,6 +21,8 @@ Route::middleware("auth:user")->group(function() {
     Route::post("logout", [LoginController::class, "destroy"])->name("user.logout");
     Route::get("/cart",[CartController::class, 'show'])->name('cart.show');
     Route::post("cart/{slug}",[CartController::class, "store"])->name('cart.store');
+    Route::post('/curi: art/update', [CartController::class, 'update'])->name('cart.update');
+    Route::delete("cart/{slug}",[CartController::class, "destroy"])->name('cart.remove');
     // Route::get('/cart', function () {
     //     return view('cart');
     // });

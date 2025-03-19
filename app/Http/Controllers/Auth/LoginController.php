@@ -35,18 +35,19 @@ class LoginController extends Controller
             'password' => ['required'],
         ]);
         $user = User::where('email', $request->email)->first();
+        if (!$user || !Auth::guard('user')->attempt($credentials)) {
+            throw ValidationException::withMessages([
+                'email' => 'The provided credentials do not match our records.',
+            ]);
+        }
+    
         if($user->status !== 'active'){
             throw ValidationException::withMessages([
                 'email' => 'Your account is not active.',
             ]);
         }
-        // dd($user);
-        if(!Auth::guard('user')->attempt($credentials)){
-            throw ValidationException::withMessages([
-                'email' => 'Your provided credentials could not be verified.',
-            ]);
-        }
-        $request->session()->invalidate();
+        $request->session()->regenerate();
+        // $request->session()->invalidate();
         return redirect()->route('home');
     }
 
@@ -80,7 +81,7 @@ class LoginController extends Controller
     public function destroy()
     {
         Auth::guard('user')->logout();
-        
+        request()->session()->flush();
         return redirect()->route('home');
     }
 }

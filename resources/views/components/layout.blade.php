@@ -34,14 +34,15 @@
                     <!-- Icons (Cart & Account) -->
                     <div class="flex items-center space-x-4">
                         @auth('user')
-                        <x-nav-link href="{{ route('cart.show') }}" :active="request()->is('cart')" class="flex items-center space-x-1 p-2 rounded-lg transition-colors duration-200">
-                            <svg class="w-5 h-5 text-gray-600 group-hover:text-green-600 transition-colors duration-200" 
-                                 fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <x-nav-link href="{{ route('cart.show') }}" :active="request()->is('cart')" class="relative flex items-center space-x-1 p-2 rounded-lg transition-colors duration-200">
+                            <svg class="w-5 h-5 text-gray-600 group-hover:text-green-600 transition-colors duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
                                       d="M5 4h1.5L9 16m0 0h8m-8 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm8 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm-8.5-3h9.25L19 7H7.312"/>
                             </svg>
                             <span class="hidden sm:inline">Cart</span>
+                            <span id="cart-count" class="absolute -top-1 -right-2 bg-red-500  text-xs font-bold px-2 py-1 rounded-full  {{ session('cart') ? 'text-white' : 'hidden' }}">{{ session('cart') ? count(session('cart')) : 0 }}</span>
                         </x-nav-link>
+                        
                         <x-nav-link href="/account" :active="request()->is('account')" class="flex items-center space-x-1 p-2 rounded-lg transition-colors duration-200">
                             <svg class="w-5 h-5 text-gray-600 group-hover:text-green-600 transition-colors duration-200" 
                                  fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -172,24 +173,26 @@
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
         <script>
-            // Mobile menu toggle
-            document.querySelector('[aria-controls="mobile-menu"]').addEventListener('click', function() {
-                const mobileMenu = document.getElementById('mobile-menu');
-                const expanded = this.getAttribute('aria-expanded') === 'true';
-                
-                this.setAttribute('aria-expanded', !expanded);
-                mobileMenu.classList.toggle('hidden');
-                
-                // Animate menu icon
-                const icon = this.querySelector('svg');
-                if (!expanded) {
-                    icon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>';
-                } else {
-                    icon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>';
-                }
+            $(document).ready(function () {
+                // Mobile menu toggle
+                $('[aria-controls="mobile-menu"]').on('click', function () {
+                    let mobileMenu = $('#mobile-menu');
+                    let expanded = $(this).attr('aria-expanded') === 'true';
+        
+                    $(this).attr('aria-expanded', !expanded);
+                    mobileMenu.toggleClass('hidden');
+        
+                    // Animate menu icon
+                    let icon = $(this).find('svg');
+                    if (!expanded) {
+                        icon.html('<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>');
+                    } else {
+                        icon.html('<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>');
+                    }
+                });
             });
-
-           
         </script>
+         @stack('scripts')
+        
     </body>
 </html>
