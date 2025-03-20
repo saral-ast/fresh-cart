@@ -33,11 +33,11 @@
                     <div class="space-y-3 mb-6">
                         <div class="flex justify-between text-base font-semibold text-gray-900">
                             <span>Total</span>
-                            <span id='total'>S{{$total}}</span>
+                            <span id='total'>${{$total}}</span>
                         </div>
                     </div>
 
-                    <button type="button" class="w-full bg-green-600 text-white py-3 px-4 rounded-lg font-semibold hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 transition-colors">
+                    <button type="button" class="w-full bg-green-600 text-white py-3 px-4 rounded-lg font-semibold hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 transition-colors proceed-to-checkout">
                         Proceed to Checkout
                     </button>
                 </div>
@@ -47,97 +47,16 @@
 @push('scripts')
    <script>
        $(document).ready(function () {
-           $(".remove-item").click(function (e) {
-                e.preventDefault(); // Prevent default form submission
-                $form = $(this).closest("form");
-                $action = $form.attr("action");
-                $slug = $(this).data("slug");
-                axios.delete($action,{slug: $slug})
-                    .then(function (response) {
-                        if(response.data.success) {
-                            $('#cart-item-'+$slug).remove();
-                                const Toast = Swal.mixin({
-                                toast: true,
-                                position: 'top-end',
-                                showConfirmButton: false,
-                                timer: 3000,
-                                timerProgressBar: true
-                            });
+    $(".remove-item").click(function (e) {
+        e.preventDefault();
+        let $form = $(this).closest("form");
+        let $action = $form.attr("action");
+        let $slug = $(this).data("slug");
 
-                            Toast.fire({
-                                icon: 'success',
-                                title: response.data.message
-                            });
-
-                            if(response.data.cartCount == 0) {
-                                $('.empty-cart').removeClass('hidden').addClass('text-center');
-                                $('#cart-count').removeClass('text-white').addClass('hidden');
-                            }
-                            $('#cart-count').text(response.data.cartCount);
-                            $('#total').text('$'+ response.data.total);
-                        }
-                    })
-                    .catch(function (error) {
-                        $('#cart-item-'+$slug).remove();
-                             const Toast = Swal.mixin({
-                                toast: true,
-                                position: 'top-end',
-                                showConfirmButton: false,
-                                timer: 3000,
-                                timerProgressBar: true
-                            });
-
-                            Toast.fire({
-                                icon: 'error',
-                                title: error.data.message
-                            });
-                        })
-           });   
-           $(".increment-button").on("click", function() {
-            let slug = $(this).data("slug");
-            let form = $(this).closest("form");
-            updateQuantity(slug, 1, form);
-        });
-
-        // Decrease Quantity
-        $(".decrement-button").on("click", function() {
-            let slug = $(this).data("slug");
-            let form = $(this).closest("form");
-            updateQuantity(slug, -1,form);
-        });
-
-        function updateQuantity(slug, change,form) {
-            let inputField = $("#counter-input-" + slug);
-            let currentQuantity = parseInt(inputField.val());
-
-            let newQuantity = currentQuantity + change;
-            if (newQuantity < 1) {
-                const Toast = Swal.mixin({
-                    toast: true,
-                    position: 'top-end',
-                    showConfirmButton: false,
-                    timer: 3000,
-                    timerProgressBar: true
-                });
-
-                Toast.fire({
-                    icon: 'error',
-                    title: 'Quantity cannot be less than 1'
-                });
-                return;
-            }
-            // console.log({{ route('cart.update') }})
-            console.log(form.attr('action'));
-            console.log(axios.post(form.attr('action')));
-            axios.post(form.attr('action'), {
-                slug: slug,
-                quantity: newQuantity,
-            })
-            .then(response => {
+        axios.delete($action, { slug: $slug })
+            .then(function (response) {
                 if (response.data.success) {
-                    inputField.val(newQuantity);
-                    $("#product-total-" + slug).text("$" + response.data.new_total);
-                    $('#total').text('$' + response.data.cartTotal);
+                    $('#cart-item-' + $slug).remove();
                     
                     const Toast = Swal.mixin({
                         toast: true,
@@ -149,11 +68,19 @@
 
                     Toast.fire({
                         icon: 'success',
-                        title: 'Cart updated successfully'
+                        title: response.data.message
                     });
+
+                    if (response.data.cartCount == 0) {
+                        $('.empty-cart').removeClass('hidden').addClass('text-center');
+                        $('#cart-count').removeClass('text-white').addClass('hidden');
+                    }
+                    $('#cart-count').text(response.data.cartCount);
+                    $('#total').text('$' + response.data.total);
                 }
             })
-            .catch(error => {
+            .catch(function (error) {
+                $('#cart-item-' + $slug).remove();
                 const Toast = Swal.mixin({
                     toast: true,
                     position: 'top-end',
@@ -164,13 +91,113 @@
 
                 Toast.fire({
                     icon: 'error',
-                    title: error.response?.data?.message || 'Error updating cart'
+                    title: error.data.message
                 });
             });
+    });
+
+    $(".increment-button").on("click", function () {
+        let slug = $(this).data("slug");
+        let form = $(this).closest("form");
+        updateQuantity(slug, 1, form);
+    });
+
+    $(".decrement-button").on("click", function () {
+        let slug = $(this).data("slug");
+        let form = $(this).closest("form");
+        updateQuantity(slug, -1, form);
+    });
+
+    function updateQuantity(slug, change, form) {
+        let inputField = $("#counter-input-" + slug);
+        let currentQuantity = parseInt(inputField.val());
+
+        let newQuantity = currentQuantity + change;
+        if (newQuantity < 1) {
+            const Toast = Swal.mixin({
+                toast: true,
+                position: 'top-end',
+                showConfirmButton: false,
+                timer: 3000,
+                timerProgressBar: true
+            });
+
+            Toast.fire({
+                icon: 'error',
+                title: 'Quantity cannot be less than 1'
+            });
+            return;
         }
-        
-           
-       });
+
+        axios.post(form.attr('action'), {
+            slug: slug,
+            quantity: newQuantity,
+        })
+        .then(response => {
+            if (response.data.success) {
+                inputField.val(newQuantity);
+                $("#product-total-" + slug).text("$" + response.data.new_total);
+                $('#total').text('$' + response.data.cartTotal);
+
+                const Toast = Swal.mixin({
+                    toast: true,
+                    position: 'top-end',
+                    showConfirmButton: false,
+                    timer: 3000,
+                    timerProgressBar: true
+                });
+
+                Toast.fire({
+                    icon: 'success',
+                    title: 'Cart updated successfully'
+                });
+            }
+        })
+        .catch(error => {
+            const Toast = Swal.mixin({
+                toast: true,
+                position: 'top-end',
+                showConfirmButton: false,
+                timer: 3000,
+                timerProgressBar: true
+            });
+
+            Toast.fire({
+                icon: 'error',
+                title: error.response?.data?.message || 'Error updating cart'
+            });
+        });
+    }
+
+    // Proceed to Checkout Click Event
+    $(".proceed-to-checkout").click(function (e) {
+        e.preventDefault();
+        let total = parseFloat($('#total').text().replace('$', ''));
+
+        if (total === 0) {
+            const Toast = Swal.mixin({
+                toast: true,
+                position: 'top-end',
+                showConfirmButton: false,
+                timer: 3000,
+                timerProgressBar: true
+            });
+
+            Toast.fire({
+                icon: 'error',
+                title: 'Your cart is empty. Add products first!'
+            });
+
+            setTimeout(() => {
+                window.location.href = "{{ route('user.product.index') }}"; // Redirect to products page after 3 seconds
+            }, 3000);
+        } else {
+            window.location.href = "/checkout"; // Proceed to checkout if total > 0
+        }
+    });
+
+});
+
    </script>
    
 @endpush

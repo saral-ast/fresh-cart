@@ -38,6 +38,8 @@ $(document).ready(function () {
                         // Change button to "Go to Cart"
                         button.prop('disabled', false);
                         button.html(`<a href="/cart" class="text-white">Go to Cart</a>`);
+
+                        
                     } else {
                         Swal.fire({
                             icon: 'error',

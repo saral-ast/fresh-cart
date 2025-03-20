@@ -4,7 +4,9 @@ use App\Http\Controllers\Auth\SignInController;
 use App\Http\Controllers\User\CartController;
 use App\Http\Controllers\User\CategoryController;
 use App\Http\Controllers\User\HomeController;
+use App\Http\Controllers\User\OrderPlacedController;
 use App\Http\Controllers\User\ProductController;
+use App\Http\Controllers\User\CheckoutController;
 use Illuminate\Support\Facades\Route;
 
 
@@ -14,18 +16,16 @@ Route::middleware("guest:user")->group(function() {
     Route::post("register", [SignInController::class, 'store']);
     Route::get("login", [LoginController::class, 'create'])->name("user.login");
     Route::post("login", [LoginController::class, "store"]);
-    // Route::post("login", [LoginController::class, "authenticate"])->name("customer.authenticate");
 });
 
 Route::middleware("auth:user")->group(function() {
     Route::post("logout", [LoginController::class, "destroy"])->name("user.logout");
     Route::get("/cart",[CartController::class, 'show'])->name('cart.show');
     Route::post("cart/{slug}",[CartController::class, "store"])->name('cart.store');
-    Route::post('/curi: art/update', [CartController::class, 'update'])->name('cart.update');
+    Route::post('/cart/update', [CartController::class, 'update'])->name('cart.update');
     Route::delete("cart/{slug}",[CartController::class, "destroy"])->name('cart.remove');
-    // Route::get('/cart', function () {
-    //     return view('cart');
-    // });
+    Route::get('/checkout', [OrderPlacedController::class, 'index'])->name('checkout.index');
+    Route::post('/checkout', [CheckoutController::class, 'checkout'])->name('checkout.store');
 });
 
 

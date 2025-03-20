@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-
+use App\Http\Requests\ProductRequest;
 use App\Models\Admin\Category;
 use App\Models\Admin\Product;
 use Illuminate\Http\Request;
@@ -14,7 +14,7 @@ class ProductController extends Controller
     /**
      * Show the form for creating the resource.
      */
-    public function index(Request $request){
+    public function index(){
         
         $products = Product::latest()->with('category')->paginate(5);
         return view('admin.products.index',['products'=> $products]);
@@ -30,11 +30,9 @@ class ProductController extends Controller
     /**
      * Store the newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(ProductRequest $request)
     {
-       $request->validate([
-            'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-            ]);
+       $request->validated();
        $product = [
             'name' => $request->name,
             'slug' => $request->slug,
@@ -70,12 +68,10 @@ class ProductController extends Controller
     /**
      * Update the resource in storage.
      */
-    public function update(Request $request,Product $product)
+    public function update(ProductRequest $request, Product $product)
     {
         
-        $request->validate([
-            'slug' =>'required|unique:products,slug,'.$product->id,
-        ]);
+        $request->validated();
         $oldImagePath = $product->image;
         $newPath = $request->image ? $request->image->store('products','public') : $oldImagePath;
         $product->update([

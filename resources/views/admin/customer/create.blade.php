@@ -16,8 +16,8 @@
                     
                     <x-forms.field label="Status" name="status">
                         <select name="status" id="status" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500">
-                            <option value="active">Active</option>
-                            <option value="inactive">Inactive</option>
+                            <option value="true">Active</option>
+                            <option value="falseP">Inactive</option>
                             {{-- <option value="banned">Banned</option> --}}
                         </select>
                     </x-forms.field>

@@ -4,7 +4,7 @@
 <div class="relative rounded-lg  border-gray-200 bg-white p-4 shadow-sm border  hover:border-green-400 hover:shadow-2xl transition-all duration-400">
 
     <!-- Product Image -->
-    <div class="h-56 w-full flex justify-center items-center">
+    <div class="h-65 w-full flex justify-center items-center">
         <a href={{ route('user.product.show', $product->slug) }}>
             <img class="h-full object-contain hover:scale-110 transition-all duration-300" src="{{ asset('storage/' . $product->image) }}" alt="{{ $product['name'] }}" />
         </a>

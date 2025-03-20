@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\CustomerRequest;
 use App\Models\User;
 use Illuminate\Http\Request;
 // use Illuminate\Validation\Rules\Password;
@@ -12,7 +13,7 @@ class CustomerController extends Controller
     /**
      * Show the form for creating the resource. 
      */
-    public function index(Request $request){
+    public function index(){
         $customers = User::latest()->paginate(5);
         // dd($customers);
         return view('admin.customer.index', ['customers' => $customers]);
@@ -25,31 +26,21 @@ class CustomerController extends Controller
     /**
      * Store the newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(CustomerRequest $request)
     {
-        $request->validate([
-            'name'=> 'required',
-            'email'=> 'required||unique:users',
-            'password'=> 'required|confirmed', 
-        ]);
+  
+        // dd($request->all());
+        $request->validated();
         $customer = [
             'name' => $request->name,
             'email' => $request->email,
             'phone' => $request->phone,
             'password'=> bcrypt($request->password),
-            'status' => $request->status,
+            'status' => (bool)$request->status,
         ];
         // dd($customer);
         User::create($customer);
         return redirect()->route('admin.customers')->with('success','Customer created successfully');
-    }
-
-    /**
-     * Display the resource.
-     */
-    public function show()
-    {
-        //
     }
 
     /**
@@ -64,13 +55,16 @@ class CustomerController extends Controller
     /**
      * Update the resource in storage.
      */
-    public function update(User $customer)
+    public function update(CustomerRequest $request, User $customer)
     {
-       $customer->update([
+       
+        $request->validated();
+         $customer->update([
             'name' => request('name'),
             'email' => request('email'),
             'phone' => request('phone'),
-            'status' => request('status'),
+            'status' => (bool)request('status'),
+            'password'=> bcrypt($request->password),
         ]);
         return redirect()->route('admin.customers')->with('success','Customer updated successfully');   
     }

@@ -20,13 +20,6 @@ class ProductController extends Controller
         abort(404);
     }
 
-    /**
-     * Store the newly created resource in storage.
-     */
-    public function store(Request $request): never
-    {
-        abort(404);
-    }
 
     /**
      * Display the resource.

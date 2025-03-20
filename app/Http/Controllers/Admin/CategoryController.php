@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\CategoryRequest;
 use App\Models\Admin\Category;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -27,13 +28,10 @@ class CategoryController extends Controller
     /**
      * Store the newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(CategoryRequest $request)
     {
         // dd($request->all());
-        $request->validate([
-            'slug' => 'required|unique:categories,slug',
-            'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-        ]);
+        $request->validated();
         $category = [
             'name' => $request->name,
             'slug' => $request->slug,
@@ -61,12 +59,10 @@ class CategoryController extends Controller
     /**
      * Update the resource in storage.
      */
-    public function update(Request $request, Category $category)
+    public function update(CategoryRequest $request, Category $category)
     {
         // dd($category);
-        $request->validate([
-            'slug' =>'required|unique:categories,slug,'.$category->id,
-        ]);
+        $request->validated();
         $oldImagePath = $category->image;
         $newPath = $request->image ? $request->image->store('categories','public') : $oldImagePath;
         $category->update([

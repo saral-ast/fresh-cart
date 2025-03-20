@@ -4,7 +4,7 @@
             <!-- Hero Section -->
             <div class="bg-white text-gray-900 py-12 px-6 flex flex-col md:flex-row items-center justify-between shadow-lg rounded-lg border border-gray-100">
                 <div class="max-w-lg">
-                    <h1 class="text-4xl font-bold mb-3 text-gray-800">Get in Touch</h1>
+                <h1 class="text-4xl font-bold mb-3 text-gray-800">Get in Touch</h1>
                     <p class="text-lg text-gray-600">We'd love to hear from you. Here's how you can reach us.</p>
                 </div>
                 <div class="hidden md:block">
