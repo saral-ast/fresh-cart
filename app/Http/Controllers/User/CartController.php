@@ -3,10 +3,10 @@
 namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
-use App\Models\Admin\Product;
+// use App\Models\Admin\Product;
 use App\Services\CartService;
 use Illuminate\Http\Request;
-use Illuminate\Contracts\Auth;
+// use Illuminate\Contracts\Auth;
 
 class CartController extends Controller
 {
@@ -43,7 +43,7 @@ class CartController extends Controller
         }catch(\Exception $e){
             return response()->json([
                'success' => false,
-               'message' => $e->getMessage()
+               'message' => 'Oops! Something went wrong'
             ], 500);
         }
     }

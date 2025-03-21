@@ -2,11 +2,13 @@
 
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\CustomerController;
+use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Auth\AdminLoginController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+
 
 
 Route::prefix("admin")->group(function() {
@@ -80,6 +82,10 @@ Route::prefix("admin")->group(function() {
         Route::patch('/products/{product}',[ProductController::class,'update'])->name('admin.product.update');  
         Route::delete('/products/{product}',[ProductController::class,'destroy'])->name('admin.product.destroy');
 
+        //orders
+        Route::get('/orders', [OrderController::class, 'index'])->name('admin.orders.index');
+        Route::get('/orders/{order}', [OrderController::class, 'show'])->name('admin.orders.show');
+        Route::patch('/orders/{order}/status', [OrderController::class, 'updateStatus'])->name('admin.orders.update.status');
         Route::get('/customers',[CustomerController::class,'index'])->name('admin.customers');
         Route::get('/customer/create',[CustomerController::class,'create'])->name('admin.customers.create');
         Route::post('/customer',[CustomerController::class,'store'])->name('admin.customers.store');

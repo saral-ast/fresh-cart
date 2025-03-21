@@ -161,6 +161,7 @@
                 timer: 3000,
                 timerProgressBar: true
             });
+            console.log(error);
 
             Toast.fire({
                 icon: 'error',

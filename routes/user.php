@@ -8,6 +8,7 @@ use App\Http\Controllers\User\OrderPlacedController;
 use App\Http\Controllers\User\ProductController;
 use App\Http\Controllers\User\CheckoutController;
 use Illuminate\Support\Facades\Route;
+// use App\Model\Admin\Product;
 
 
 
@@ -21,11 +22,12 @@ Route::middleware("guest:user")->group(function() {
 Route::middleware("auth:user")->group(function() {
     Route::post("logout", [LoginController::class, "destroy"])->name("user.logout");
     Route::get("/cart",[CartController::class, 'show'])->name('cart.show');
-    Route::post("cart/{slug}",[CartController::class, "store"])->name('cart.store');
     Route::post('/cart/update', [CartController::class, 'update'])->name('cart.update');
-    Route::delete("cart/{slug}",[CartController::class, "destroy"])->name('cart.remove');
-    Route::get('/checkout', [OrderPlacedController::class, 'index'])->name('checkout.index');
+    Route::post("/cart/{slug}",[CartController::class, "store"])->name('cart.store');
+    Route::delete("/cart/{slug}",[CartController::class, "destroy"])->name('cart.remove');
+    Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout.index');
     Route::post('/checkout', [CheckoutController::class, 'checkout'])->name('checkout.store');
+    Route::get('/order/success/{order}', [CheckoutController::class, 'success'])->name('order.success');
 });
 
 

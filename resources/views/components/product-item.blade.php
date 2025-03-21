@@ -21,7 +21,7 @@
 
     <!-- Quantity Controls -->
     <div class="col-span-2 flex items-center justify-center space-x-2">
-        <form action="{{ route('cart.update') }}" class=".update-form" method="POST">
+        <form method="GET" class=".update-form" action="{{ route('cart.update') }}">
             @csrf
             <button type="button" class="decrement-button w-8 h-8 flex items-center justify-center rounded-md border border-gray-300 bg-gray-100 hover:bg-gray-200 transition"
             data-slug="{{ $item['slug'] }}">
@@ -34,7 +34,7 @@
 
         <input type="text" id="counter-input-{{ $item['slug'] }}" class="w-10 text-center border border-gray-300 rounded-md bg-white text-gray-900 text-sm font-semibold focus:ring-2 focus:ring-gray-200"
             value="{{ $item['quantity'] }}" required readonly />
-        <form action="{{ route('cart.update') }}" class=".update-form" method="POST">
+        <form method="GET" class=".update-form" action="{{ route('cart.update') }}">
             @csrf
             <button type="button" class="increment-button w-8 h-8 flex items-center justify-center rounded-md border border-gray-300 bg-gray-100 hover:bg-gray-200 transition"
             data-slug="{{ $item['slug'] }}">
