@@ -7,6 +7,7 @@ use App\Http\Controllers\User\HomeController;
 use App\Http\Controllers\User\OrderPlacedController;
 use App\Http\Controllers\User\ProductController;
 use App\Http\Controllers\User\CheckoutController;
+use App\Models\Order;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -52,4 +53,16 @@ Route::get('/preview', function () {
     // dd($user);
     return view('emails.welcome',[
         'user' => $user]);
+});
+
+Route::get('/order/preview', function () {
+  
+    
+    $user = Auth::user();
+    $order = Order::where('user_id', $user->id)->latest()->first();
+    // dd($user);
+    return view('emails.order-placed',[
+        'user' => $user,
+        'order' => $order,
+        'isAdmin' => false]);
 });

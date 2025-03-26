@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\User;
 
+use App\Events\OrderPlaced;
 use App\Http\Controllers\Controller;
 use App\Models\Address;
 use App\Models\Order;
@@ -12,6 +13,8 @@ use App\Services\OrderService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
+use PgSql\Lob;
 
 class CheckoutController extends Controller
 {
@@ -129,6 +132,13 @@ class CheckoutController extends Controller
             // Clear cart and order data
             $this->cartService->clearCart();
             $this->orderService->clearOrderData();
+
+            Log::info('Firing OrderPlaced event for order: ' . $order->id);
+            // dd($order);
+            event(new OrderPlaced($order));
+           
+
+
 
             return redirect()
                 ->route('order.success', ['order' => $order->id])
