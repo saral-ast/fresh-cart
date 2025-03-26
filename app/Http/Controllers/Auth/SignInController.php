@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Events\UserRegistered;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
@@ -17,7 +18,7 @@ class SignInController extends Controller
             return view('auth.register');
         } catch (\Exception $e) {
             return redirect()
-                ->route('user.signin')
+                ->back()
                 ->with('error', 'Failed to load registration page: ' . $e->getMessage());
         }
     }
@@ -43,6 +44,10 @@ class SignInController extends Controller
             
             Auth::login($user);
             $request->session()->regenerate();
+            $eventarg = event(new UserRegistered($user));
+            // dd($eventarg);
+
+            
 
             return redirect('/')
                 ->with('success', 'Registration successful. Welcome!');
