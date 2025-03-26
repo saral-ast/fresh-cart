@@ -15,14 +15,22 @@ class CategoryController extends Controller
      */
     public function index()
     {
-       
-        $categories = Category::latest()->paginate(5);
+        try{
+            $categories = Category::latest()->paginate(5);
         // dd($categories);
         return view('admin.categories.index',['categories'=> $categories]);
+        }catch(\Exception $e){
+            return redirect()->route('admin.categories')->with('error','Something went wrong');
+        }
     }
     public function create()
     {
-        return view('admin.categories.create');
+        try{
+            return view('admin.categories.create');
+        }catch(\Exception $e){
+            return redirect()->route('admin.categories')->with('error','Something went wrong');
+        }
+       
     }
 
     /**
@@ -30,7 +38,8 @@ class CategoryController extends Controller
      */
     public function store(CategoryRequest $request)
     {
-        // dd($request->all());
+        try{
+            // dd($request->all());
         $request->validated();
         $category = [
             'name' => $request->name,
@@ -43,6 +52,9 @@ class CategoryController extends Controller
         return redirect()->route('admin.categories')->with('success','Category created successfully');
         // return redirect()->route('admin.categories.index');
         // dd($category);
+        }catch(\Exception $e){
+            return redirect()->route('admin.categories')->with('error','The Category is not stored');
+        }
     }
 
     /**
@@ -53,7 +65,11 @@ class CategoryController extends Controller
      */
     public function edit(Category $category)
     { 
-        return view('admin.categories.edit',['category'=> $category]);
+        try{
+            return view('admin.categories.edit',['category'=> $category]);
+        }catch(\Exception $e){
+            return redirect()->route('admin.categories')->with('error','Something went wrong');
+        }
     }
 
     /**
@@ -62,20 +78,24 @@ class CategoryController extends Controller
     public function update(CategoryRequest $request, Category $category)
     {
         // dd($category);
-        $request->validated();
-        $oldImagePath = $category->image;
-        $newPath = $request->image ? $request->image->store('categories','public') : $oldImagePath;
-        $category->update([
-            'name' => request('name'),
-            'slug' => request('slug'),
-            'image' => $newPath,
-            'featured' => request('featured')? true : false,
-        ]);
+        try{
+            $request->validated();
+            $oldImagePath = $category->image;
+            $newPath = $request->image ? $request->image->store('categories','public') : $oldImagePath;
+            $category->update([
+                'name' => request('name'),
+                'slug' => request('slug'),
+                'image' => $newPath,
+                'featured' => request('featured')? true : false,
+            ]);
 
-        if($oldImagePath !== $newPath){
-            Storage::disk('public')->delete($oldImagePath);
-        }        
-        return redirect()->route('admin.categories')->with('success','Category updated successfully');
+            if($oldImagePath !== $newPath){
+                Storage::disk('public')->delete($oldImagePath);
+            }        
+            return redirect()->route('admin.categories')->with('success','Category updated successfully');
+        }catch(\Exception $e){
+            return redirect()->route('admin.categories')->with('error','Category is not updated');
+        }
     }
 
     /**
@@ -83,11 +103,15 @@ class CategoryController extends Controller
      */
     public function destroy(Category $category)
     { 
-        if ($category->image) {
-            Storage::disk('public')->delete($category->image);
-        }   
-        $category->delete();
-        
-        return redirect('admin/categories')->with('success', 'Category deleted successfully');
+        try{
+            if ($category->image) {
+                Storage::disk('public')->delete($category->image);
+            }   
+            $category->delete();
+            
+            return redirect('admin/categories')->with('success', 'Category deleted successfully');
+        }catch(\Exception $e){
+            return redirect()->route('admin.categories')->with('error','Category is not deleted');
+        }
     }
 }

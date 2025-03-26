@@ -4,6 +4,7 @@ use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\CustomerController;
 use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\Admin\ProductController;
+use App\Http\Controllers\Admin\StaticBlockController;
 use App\Http\Controllers\Auth\AdminLoginController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
@@ -92,6 +93,14 @@ Route::prefix("admin")->group(function() {
         Route::get('/customers/{customer}/edit',[CustomerController::class,'edit'])->name('admin.customers.edit');
         Route::patch('/customers/{customer}',[CustomerController::class,'update'])->name('admin.customers.update');
         Route::delete('/customers/{customer}',[CustomerController::class,'destroy'])->name('admin.customers.destroy');
+        
+        // Static Blocks
+        Route::get('/static-blocks', [StaticBlockController::class, 'index'])->name('admin.static-blocks.index');
+        Route::get('/static-blocks/create', [StaticBlockController::class, 'create'])->name('admin.static-blocks.create');
+        Route::post('/static-blocks', [StaticBlockController::class, 'store'])->name('admin.static-blocks.store');
+        Route::get('/static-blocks/{staticBlock}/edit', [StaticBlockController::class, 'edit'])->name('admin.static-blocks.edit');
+        Route::patch('/static-blocks/{staticBlock}', [StaticBlockController::class, 'update'])->name('admin.static-blocks.update');
+        Route::delete('/static-blocks/{staticBlock}', [StaticBlockController::class, 'destroy'])->name('admin.static-blocks.destroy');
     });
 
 });

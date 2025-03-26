@@ -124,7 +124,7 @@
             {{ $slot }}
         </main>
 
-        <footer class="bg-gray-100 w-full py-12">
+        {{-- <footer class="bg-gray-100 w-full py-12">
             <div class="max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-10">
                     <!-- About Us -->
@@ -160,14 +160,22 @@
                             </button>
                         </form>
                     </div>
+                </div> --}}
+
+                <!-- Static Block Footer Content -->
+                @php
+                    use App\Helpers\StaticBlockHelper;
+                @endphp
+                <div class="mt-8 pt-6 border-t border-gray-200">
+                    {!! StaticBlockHelper::render('footer', '') !!}
                 </div>
 
                 <!-- Copyright -->
-                <div class="mt-12 pt-8 border-t border-gray-200 text-center text-sm text-gray-600">
+                {{-- <div class="mt-12 pt-8 border-t border-gray-200 text-center text-sm text-gray-600">
                     © 2025 FreshCart. All rights reserved.
                 </div>
             </div>
-        </footer>
+        </footer> --}}
 
         <script src="https://cdn.jsdelivr.net/npm/flowbite@3.1.2/dist/flowbite.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>

@@ -23,11 +23,24 @@ class CheckoutController extends Controller
         $this->cartService = $cartService;
         $this->orderService = $orderService;
     }
-    public function index(){
-        $cart = $this->cartService->getCart();
-        $total = $this->cartService->getCartTotal();
-        $user = Auth::user();
-        return view('user.checkout', ['cart' => $cart, 'total' => $total,'user' => $user]);
+
+    public function index()
+    {
+        try {
+            $cart = $this->cartService->getCart();
+            $total = $this->cartService->getCartTotal();
+            $user = Auth::user();
+
+            return view('user.checkout', [
+                'cart' => $cart,
+                'total' => $total,
+                'user' => $user
+            ]);
+        } catch (\Exception $e) {
+            return redirect()
+                ->route('cart.index')
+                ->with('error', 'Failed to load checkout page: ' . $e->getMessage());
+        }
     }
 
     public function checkout(Request $request)
@@ -35,6 +48,7 @@ class CheckoutController extends Controller
         try {
             $user = Auth::user();
             $cart = $this->cartService->getCart();
+
             if (empty($cart)) {
                 return response()->json([
                     'success' => false,
@@ -42,7 +56,18 @@ class CheckoutController extends Controller
                 ], 400);
             }
 
-            // Store address data in session
+            // Validate request data
+            $request->validate([
+                'address' => 'required|string|max:255',
+                'city' => 'required|string|max:100',
+                'state' => 'required|string|max:100',
+                'country' => 'required|string|max:100',
+                'postal_code' => 'required|string|max:20',
+            ]);
+
+            DB::beginTransaction();
+
+            // Store address data
             $addressData = [
                 'address' => $request->address,
                 'city' => $request->city,
@@ -51,24 +76,22 @@ class CheckoutController extends Controller
                 'postal_code' => $request->postal_code,
             ];
             $this->orderService->storeAddress($addressData);
-            
-            // Store cart data in session
+
+            // Store cart data
             $this->orderService->storeCart($cart);
-            
-            // Store payment data in session
+
+            // Store payment data
+            $total = $this->cartService->getCartTotal();
             $paymentData = [
-                'amount' => $this->cartService->getCartTotal(),
+                'amount' => $total,
                 'status' => 'pending'
             ];
             $this->orderService->storePayment($paymentData);
-            
-            // Now create the actual order in database
-            DB::beginTransaction();
-            
+
             // Create order
             $order = Order::create([
                 'user_id' => $user->id,
-                'total' => $this->cartService->getCartTotal(),
+                'total' => $total,
                 'status' => 'pending'
             ]);
 
@@ -84,13 +107,14 @@ class CheckoutController extends Controller
             }
 
             // Create payment
-            $payment = Payment::create([
+            Payment::create([
                 'order_id' => $order->id,
                 'user_id' => $user->id,
                 'amount' => $order->total,
                 'status' => 'pending'
             ]);
 
+            // Create address
             Address::create([
                 'user_id' => $user->id,
                 'address' => $request->address,
@@ -101,29 +125,48 @@ class CheckoutController extends Controller
             ]);
 
             DB::commit();
+
+            // Clear cart and order data
             $this->cartService->clearCart();
             $this->orderService->clearOrderData();
 
-            return redirect()->route('order.success', ['order' => $order->id]);
+            return redirect()
+                ->route('order.success', ['order' => $order->id])
+                ->with('success', 'Order placed successfully!');
 
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            DB::rollBack();
+            return redirect()
+                ->route('checkout.index')
+                ->withErrors($e->validator)
+                ->withInput();
         } catch (\Exception $e) {
             DB::rollBack();
-            return response()->json([
-                'success' => false,
-                'message' => 'Failed to create order: ' . $e->getMessage()
-            ], 500);
+            return redirect()
+                ->route('checkout.index')
+                ->with('error', 'Failed to process order: ' . $e->getMessage());
         }
     }
-    
+
     public function success($orderId)
     {
-        $order = Order::findOrFail($orderId);
-        
-        // Ensure the order belongs to the authenticated user
-        if ($order->user_id !== Auth::id()) {
-            abort(403, 'Unauthorized action.');
+        try {
+            $order = Order::findOrFail($orderId);
+
+            // Ensure the order belongs to the authenticated user
+            if ($order->user_id !== Auth::id()) {
+                abort(403, 'Unauthorized action.');
+            }
+
+            return view('user.order-success', ['order' => $order]);
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+            return redirect()
+                ->route('home')
+                ->with('error', 'Order not found.');
+        } catch (\Exception $e) {
+            return redirect()
+                ->route('home')
+                ->with('error', 'Failed to load order confirmation: ' . $e->getMessage());
         }
-        
-        return view('user.order-success', ['order' => $order]);
     }
 }

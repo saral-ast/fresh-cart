@@ -11,30 +11,56 @@ class AdminLoginController extends Controller
 {
     public function create()
     {
-        return view('auth.admin-login');
+        try {
+            return view('auth.admin-login');
+        } catch (\Exception $e) {
+            return redirect()
+                ->route('admin.login')
+                ->with('error', 'Failed to load login page: ' . $e->getMessage());
+        }
     }
 
     public function store(Request $request)
     {
-    
-        $credentials = $request->validate([
-            'email' => ['required', 'email'],
-            'password' => ['required'],
-        ]);
-
-        if (!Auth::guard('admin')->attempt($credentials)) {
-            throw ValidationException::withMessages([
-                'email' => 'Your provided credentials could not be verified.',
+        try {
+            $credentials = $request->validate([
+                'email' => ['required', 'email'],
+                'password' => ['required'],
             ]);
-        }
 
-        $request->session()->regenerate();
-        return redirect()->route('dashboard.index');
+            if (!Auth::guard('admin')->attempt($credentials)) {
+                throw ValidationException::withMessages([
+                    'email' => 'Your provided credentials could not be verified.',
+                ]);
+            }
+
+            $request->session()->regenerate();
+            return redirect()
+                ->route('dashboard.index')
+                ->with('success', 'Successfully logged in as admin.');
+        } catch (ValidationException $e) {
+            throw $e; // Re-throw validation exceptions to maintain Laravel's default behavior
+        } catch (\Exception $e) {
+            return redirect()
+                ->route('admin.login')
+                ->with('error', 'Login failed: ' . $e->getMessage());
+        }
     }
 
     public function destroy(Request $request)
     {
-        Auth::guard('admin')->logout();
-        return redirect()->route('admin.login');
+        try {
+            Auth::guard('admin')->logout();
+            $request->session()->invalidate();
+            $request->session()->regenerateToken();
+
+            return redirect()
+                ->route('admin.login')
+                ->with('success', 'Successfully logged out.');
+        } catch (\Exception $e) {
+            return redirect()
+                ->route('admin.login')
+                ->with('error', 'Logout failed: ' . $e->getMessage());
+        }
     }
 }

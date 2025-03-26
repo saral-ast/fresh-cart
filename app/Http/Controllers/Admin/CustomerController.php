@@ -14,13 +14,21 @@ class CustomerController extends Controller
      * Show the form for creating the resource. 
      */
     public function index(){
-        $customers = User::latest()->paginate(5);
-        // dd($customers);
-        return view('admin.customer.index', ['customers' => $customers]);
+        try{
+            $customers = User::latest()->paginate(5);
+            // dd($customers);
+            return view('admin.customer.index', ['customers' => $customers]);
+        }catch(\Exception $e){
+            return redirect()->route('admin.customers')->with('error','Something went wrong');
+        }
     }
     public function create()
     {
-        return view('admin.customer.create');
+        try{
+            return view('admin.customer.create');
+        }catch(\Exception $e){
+            return redirect()->route('admin.customers')->with('error','Something went wrong');
+        }
     }
 
     /**
@@ -30,17 +38,21 @@ class CustomerController extends Controller
     {
   
         // dd($request->all());
-        $request->validated();
-        $customer = [
-            'name' => $request->name,
-            'email' => $request->email,
-            'phone' => $request->phone,
-            'password'=> bcrypt($request->password),
-            'status' => (bool)$request->status,
-        ];
-        // dd($customer);
-        User::create($customer);
-        return redirect()->route('admin.customers')->with('success','Customer created successfully');
+        try{
+            $request->validated();
+            $customer = [
+                'name' => $request->name,
+                'email' => $request->email,
+                'phone' => $request->phone,
+                'password'=> bcrypt($request->password),
+                'status' => (bool)$request->status,
+            ];
+            // dd($customer);
+            User::create($customer);
+            return redirect()->route('admin.customers')->with('success','Customer created successfully');
+        }catch(\Exception $e){
+            return redirect()->route('admin.customers')->with('error','Customer not created');
+        }
     }
 
     /**
@@ -49,7 +61,11 @@ class CustomerController extends Controller
     public function edit(User $customer)
     {
     //   dd($customer);
-        return view('admin.customer.edit', ['customer' => $customer]);   
+        try{
+            return view('admin.customer.edit', ['customer' => $customer]);
+        }catch(\Exception $e){
+            return redirect()->route('admin.customers')->with('error','Something went wrong');
+        }   
     }
 
     /**
@@ -57,7 +73,7 @@ class CustomerController extends Controller
      */
     public function update(CustomerRequest $request, User $customer)
     {
-       
+       try{
         $request->validated();
          $customer->update([
             'name' => request('name'),
@@ -67,6 +83,11 @@ class CustomerController extends Controller
             'password'=> bcrypt($request->password),
         ]);
         return redirect()->route('admin.customers')->with('success','Customer updated successfully');   
+
+       }
+       catch(\Exception $e){
+        return redirect()->route('admin.customers')->with('error', $e->getMessage());
+       }
     }
 
     /**
@@ -75,7 +96,12 @@ class CustomerController extends Controller
     public function destroy(User $customer)
     {
         // dd($customer);
-        $customer->delete();
-        return redirect()->route('admin.customers')->with('success','Customer deleted successfully');
+        try{
+            $customer->delete();
+            return redirect()->route('admin.customers')->with('success','Customer deleted successfully');
+    
+        }catch(\Exception $e){
+            return redirect()->route('admin.customers')->with('error','Customer is not deleted');
+        }
     }
 }

@@ -8,51 +8,42 @@ use Illuminate\Http\Request;
 
 class ProductController extends Controller
 {
-    /**
-     * Show the form for creating the resource.
-     */
-    public function index(){
-        $products = Product::latest("id")->paginate(8);
-        return view('user.product.index',['products'=>$products]);
-    }
-    public function create(): never
+    public function index()
     {
-        abort(404);
+        try {
+            $products = Product::latest("id")->paginate(8);
+            return view('user.product.index', ['products' => $products]);
+        } catch (\Exception $e) {
+            return redirect()
+                ->route('user.product.index')
+                ->with('error', 'Failed to load products: ' . $e->getMessage());
+        }
     }
 
-
-    /**
-     * Display the resource.
-     */
     public function show($slug)
     {
-        // dd($slug);
-        $product = Product::where('slug',$slug)->with('category')->first();
-        $relatedProducts =  Product::where('category_id',$product->category_id)->where('id','!=',$product->id)->latest()->get();
-        return view('user.product.show',['product'=>$product,'relatedProducts'=>$relatedProducts]);
-    }
+        try {
+            $product = Product::where('slug', $slug)
+                ->with('category')
+                ->firstOrFail();
 
-    /**
-     * Show the form for editing the resource.
-     */
-    public function edit()
-    {
-        //
-    }
+            $relatedProducts = Product::where('category_id', $product->category_id)
+                ->where('id', '!=', $product->id)
+                ->latest()
+                ->get();
 
-    /**
-     * Update the resource in storage.
-     */
-    public function update(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Remove the resource from storage.
-     */
-    public function destroy(): never
-    {
-        abort(404);
+            return view('user.product.show', [
+                'product' => $product,
+                'relatedProducts' => $relatedProducts
+            ]);
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+            return redirect()
+                ->route('user.product.index')
+                ->with('error', 'Product not found.');
+        } catch (\Exception $e) {
+            return redirect()
+                ->route('user.product.index')
+                ->with('error', 'Failed to load product details: ' . $e->getMessage());
+        }
     }
 }

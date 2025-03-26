@@ -56,6 +56,13 @@
                     <p class="px-4 text-xs font-semibold text-gray-400 uppercase tracking-wider">System</p>
                     <ul class="mt-4 space-y-3">
                         <li>
+                            <x-admin.nav-link href="/admin/static-blocks" :active="request()->is('admin/static-blocks*')"
+                                class="flex items-center px-4 py-3 text-gray-600 hover:text-green-600 hover:bg-green-50 rounded-lg transition-all duration-200">
+                                <i class="mdi mdi-file-document-edit text-xl mr-3"></i>
+                                <span class="font-medium">Static Blocks</span>
+                            </x-admin.nav-link>
+                        </li>
+                        <li>
                             <x-admin.nav-link href="/dashboard/settings" :active="request()->is('dashboard/settings')"
                                 class="flex items-center px-4 py-3 text-gray-600 hover:text-green-600 hover:bg-green-50 rounded-lg transition-all duration-200">
                                 <i class="mdi mdi-cog text-xl mr-3"></i>

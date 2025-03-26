@@ -13,8 +13,12 @@ class OrderController extends Controller
      */
     public function index()
     {
-        $orders = Order::with(['user', 'ordersitem'])->latest()->get();
-        return view('admin.orders.index', compact('orders'));
+        try{
+            $orders = Order::with(['user', 'ordersitem'])->latest()->get();
+            return view('admin.orders.index', compact('orders'));
+        }catch(\Exception $e){
+            return redirect()->route('admin.orders')->with('error','Something went wrong');
+        }
     }
 
     /**
@@ -22,12 +26,19 @@ class OrderController extends Controller
      */
     public function show(Order $order)
     {
-       $order->load(['user', 'ordersitem.product', 'address', 'payment']);
+       try{
+        $order->load(['user', 'ordersitem.product', 'address', 'payment']);
     
         return response()->json([
             'success' => true,
             'order' => $order,
         ]);
+       }catch(\Exception $e){
+        return response()->json([
+            'success' => false,
+            'message' => 'Order not found'
+        ], 404);
+       }
     }
 
     /**
@@ -35,18 +46,25 @@ class OrderController extends Controller
      */
     public function updateStatus(Request $request, Order $order)
     {
-        $request->validate([
-            'status' => 'required|in:pending,processing,completed,cancelled'
-        ]);
-
-        $order->update([
-            'status' => $request->status
-        ]);
-
-        return response()->json([
-            'success' => true,
-            'message' => 'Order status updated successfully',
-            'status' => $order->status
-        ]);
+        try{
+            $request->validate([
+                'status' => 'required|in:pending,processing,completed,cancelled'
+            ]);
+    
+            $order->update([
+                'status' => $request->status
+            ]);
+    
+            return response()->json([
+                'success' => true,
+                'message' => 'Order status updated successfully',
+                'status' => $order->status
+            ]);
+        }catch(\Exception $e){
+            return response()->json([
+               'success' => false,
+               'message' => 'Something went wrong'
+            ], 500);
+        }
     }
 }
