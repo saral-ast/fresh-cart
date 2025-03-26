@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\CategoryController;
+use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\CustomerController;
 use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\Admin\ProductController;
@@ -22,48 +23,7 @@ Route::prefix("admin")->group(function() {
     });
 
     Route::middleware("auth:admin")->group(function() {
-        Route::get('/dashboard', function () {
-            $orders = collect([
-                (object) [
-                    'order_number' => '#FC0005',
-                    'product_name' => "Haldiram's Sev Bhujia",
-                    'order_date' => '28 March 2023',
-                    'price' => 18.00,
-                    'status' => 'Shipped',
-                ],
-                (object) [
-                    'order_number' => '#FC0004',
-                    'product_name' => 'NutriChoice Digestive',
-                    'order_date' => '24 March 2023',
-                    'price' => 24.00,
-                    'status' => 'Pending',
-                ],
-                (object) [
-                    'order_number' => '#FC0003',
-                    'product_name' => 'Onion Flavour Potato',
-                    'order_date' => '8 Feb 2023',
-                    'price' => 9.00,
-                    'status' => 'Cancel',
-                ],
-                (object) [
-                    'order_number' => '#FC0002',
-                    'product_name' => 'Blueberry Greek Yogurt',
-                    'order_date' => '20 Jan 2023',
-                    'price' => 12.00,
-                    'status' => 'Pending',
-                ],
-                (object) [
-                    'order_number' => '#FC0001',
-                    'product_name' => 'Slurrp Millet Chocolate',
-                    'order_date' => '14 Jan 2023',
-                    'price' => 8.00,
-                    'status' => 'Processing',
-                ],
-            ]);
-            
-            return view('dashboard.index', compact('orders'));
-            
-        })->name('dashboard.index');
+        Route::get('/dashboard', [DashboardController::class, "index"])->name("dashboard.index");
         
         // Route::get("/", [DashboardController::class, "index"])->name("admin.dashboard");
         Route::post("logout", [AdminLoginController::class, "destroy"])->name("admin.logout");

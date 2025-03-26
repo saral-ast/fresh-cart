@@ -36,7 +36,7 @@
                             </x-admin.nav-link>
                         </li>
                         <li>
-                            <x-admin.nav-link href="/dashboard/orders" :active="request()->is('admin/orders')"
+                            <x-admin.nav-link href="/admin/orders" :active="request()->is('admin/orders')"
                                 class="flex items-center px-4 py-3 text-gray-600 hover:text-green-600 hover:bg-green-50 rounded-lg transition-all duration-200">
                                 <i class="mdi mdi-cart text-xl mr-3"></i>
                                 <span class="font-medium">Orders</span>
