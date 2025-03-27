@@ -71,50 +71,52 @@
                 </div>
             </div>
 
-            <!-- Right: Order History -->
+            <!-- Right: Scrollable Order History -->
             <div class="lg:col-span-2">
                 <div class="bg-white shadow-lg rounded-xl p-6">
                     <h2 class="text-2xl font-semibold text-gray-800 mb-6">Order History</h2>
 
-                    @forelse($orders as $order)
-                        <div class="border border-gray-200 rounded-lg p-4 mb-4 hover:shadow-md transition duration-200">
-                            <div class="flex justify-between items-center mb-4">
-                                <div>
-                                    <p class="text-lg font-medium text-gray-800">Order #{{ $order->id }}</p>
-                                    <p class="text-sm text-gray-600">Placed on: {{ $order->created_at->format('M d, Y') }}</p>
-                                    <p class="text-sm text-gray-600">Status: 
-                                        <span class="capitalize px-2 py-1 rounded-full text-xs 
-                                                     {{ $order->status === 'completed' ? 'bg-green-100 text-green-700' : 
-                                                        'bg-yellow-100 text-yellow-700' }}">
-                                            {{ $order->status }}
-                                        </span>
-                                    </p>
+                    <div class="max-h-96 overflow-y-auto">
+                        @forelse($orders as $order)
+                            <div class="border border-gray-200 rounded-lg p-4 mb-4 hover:shadow-md transition duration-200">
+                                <div class="flex justify-between items-center mb-4">
+                                    <div>
+                                        <p class="text-lg font-medium text-gray-800">Order #{{ $order->id }}</p>
+                                        <p class="text-sm text-gray-600">Placed on: {{ $order->created_at->format('M d, Y') }}</p>
+                                        <p class="text-sm text-gray-600">Status: 
+                                            <span class="capitalize px-2 py-1 rounded-full text-xs 
+                                                         {{ $order->status === 'completed' ? 'bg-green-100 text-green-700' : 
+                                                            'bg-yellow-100 text-yellow-700' }}">
+                                                {{ $order->status }}
+                                            </span>
+                                        </p>
+                                    </div>
+                                    <div>
+                                        <p class="text-lg font-medium text-gray-800">${{ number_format($order->total, 2) }}</p>
+                                    </div>
                                 </div>
                                 <div>
-                                    <p class="text-lg font-medium text-gray-800">${{ number_format($order->total, 2) }}</p>
+                                    <h3 class="text-gray-700 font-medium mb-2">Items:</h3>
+                                    <ul class="space-y-3">
+                                        @foreach($order->ordersitem as $item)
+                                            <li class="flex justify-between items-center text-sm text-gray-600 bg-gray-50 p-3 rounded-lg">
+                                                <div class="flex items-center space-x-3">
+                                                    <span class="font-medium text-gray-800">{{ $item->product->name }}</span>
+                                                    <span>(x{{ $item->quantity }})</span>
+                                                </div>
+                                                <span class="font-medium">${{ number_format($item->price * $item->quantity, 2) }}</span>
+                                            </li>
+                                        @endforeach
+                                    </ul>
                                 </div>
                             </div>
-                            <div>
-                                <h3 class="text-gray-700 font-medium mb-2">Items:</h3>
-                                <ul class="space-y-3">
-                                    @foreach($order->ordersitem as $item)
-                                        <li class="flex justify-between items-center text-sm text-gray-600 bg-gray-50 p-3 rounded-lg">
-                                            <div class="flex items-center space-x-3">
-                                                <span class="font-medium text-gray-800">{{ $item->product->name }}</span>
-                                                <span>(x{{ $item->quantity }})</span>
-                                            </div>
-                                            <span class="font-medium">${{ number_format($item->price * $item->quantity, 2) }}</span>
-                                        </li>
-                                    @endforeach
-                                </ul>
+                        @empty
+                            <div class="text-center py-8">
+                                <p class="text-gray-500 text-lg">No orders found.</p>
+                                <a href="/products" class="mt-4 inline-block px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition duration-200">Start Shopping</a>
                             </div>
-                        </div>
-                    @empty
-                        <div class="text-center py-8">
-                            <p class="text-gray-500 text-lg">No orders found.</p>
-                            <a href="/products" class="mt-4 inline-block px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition duration-200">Start Shopping</a>
-                        </div>
-                    @endforelse
+                        @endforelse
+                    </div>
                 </div>
             </div>
         </div>

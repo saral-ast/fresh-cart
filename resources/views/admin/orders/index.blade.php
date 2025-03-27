@@ -54,6 +54,10 @@
                     @endforelse
                 </tbody>
             </table>
+            <div class="px-6 py-4">
+                {{ $orders->links() }}
+            </div>
+            {{-- {{ $or ders->links() }} --}}
         </div>
 
         <!-- Order Modal -->
@@ -147,6 +151,9 @@
                                 </table>
                             </div>
                         </div>
+                    </div>
+                    <div>
+                        
                     </div>
                     <!-- Modal footer -->
                     <div class="flex items-center justify-end p-6 space-x-2 border-t border-gray-200 rounded-b">

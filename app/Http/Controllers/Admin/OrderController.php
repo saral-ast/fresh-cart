@@ -14,10 +14,10 @@ class OrderController extends Controller
     public function index()
     {
         try{
-            $orders = Order::with(['user', 'ordersitem'])->latest()->get();
+            $orders = Order::with(['user', 'ordersitem'])->latest()->paginate(8);
             return view('admin.orders.index', compact('orders'));
         }catch(\Exception $e){
-            return redirect()->route('admin.orders')->with('error','Something went wrong');
+            return redirect()->route('admin.orders.index')->with('error','Something went wrong');
         }
     }
 
