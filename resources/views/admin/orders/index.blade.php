@@ -176,6 +176,7 @@
                     axios.get(`/admin/orders/${orderId}`)
                         .then(response => {
                             const data = response.data;
+                            console.log(data);
                             
                             // Populate modal with order details
                             $('#modal-order-id').text('#' + data.order.id);

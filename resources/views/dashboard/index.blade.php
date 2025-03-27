@@ -46,13 +46,9 @@
         <!-- Recent Orders Section -->
         <div class="bg-white rounded-lg shadow-md p-6">
             <h2 class="text-xl font-semibold mb-4">Recent Orders</h2>
-            <section class="bg-white p-8 antialiased md:p-12">
-                <div class="mx-auto max-w-screen-xl px-4 2xl:px-0 mb-6">
-                    <h2 class="text-xl font-semibold text-gray-900 sm:text-2xl">Order Management</h2>
-                    <p class="mt-1 text-sm text-gray-500">View and manage all customer orders</p>
-                </div>
-        
-                <div class="mt-6 overflow-x-auto bg-white border border-gray-200 rounded-lg shadow-md">
+            <section class="bg-white antialiased">
+                
+                <div class="overflow-x-auto bg-white border border-gray-200 rounded-lg shadow-md">
                     <table class="w-full text-left">
                         <thead class="bg-gray-100">
                             <tr>

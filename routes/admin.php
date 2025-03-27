@@ -71,48 +71,7 @@ Route::prefix("admin")->group(function() {
 
 
 
-Route::get('/dashboard/orders', function () { 
-    $orders = collect([
-        (object) [
-            'image' => 'https://via.placeholder.com/40', // Replace with actual image URL
-            'order_number' => 'FC#1004',
-            'customer' => 'Ezekiel Rogerson',
-            'order_date' => '09 March 2023 (6:23 pm)',
-            'payment' => 'Stripe',
-            'status' => 'Success',
-            'amount' => '$23.11',
-        ],
-        (object) [
-            'image' => 'https://via.placeholder.com/40',
-            'order_number' => 'FC#1003',
-            'customer' => 'Maria Roux',
-            'order_date' => '18 Feb 2022 (12:20 pm)',
-            'payment' => 'COD',
-            'status' => 'Success',
-            'amount' => '$2.00',
-        ],
-        (object) [
-            'image' => 'https://via.placeholder.com/40',
-            'order_number' => 'FC#1002',
-            'customer' => 'Robert Donald',
-            'order_date' => '12 Feb 2022 (4:56 pm)',
-            'payment' => 'Paypal',
-            'status' => 'Cancel',
-            'amount' => '$56.00',
-        ],
-        (object) [
-            'image' => 'https://via.placeholder.com/40',
-            'order_number' => 'FC#1001',
-            'customer' => 'Diann Watson',
-            'order_date' => '22 Jan 2023 (1:20 pm)',
-            'payment' => 'Paypal',
-            'status' => 'Success',
-            'amount' => '$23.00',
-        ],
-    ]);
 
-    return view('dashboard.orders', compact('orders'));
-});
 
 Route::get('/admin/generate-slug', function (Request $request) {
     $slug = Str::slug($request->name);

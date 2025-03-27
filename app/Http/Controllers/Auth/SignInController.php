@@ -44,7 +44,7 @@ class SignInController extends Controller
             
             Auth::login($user);
             $request->session()->regenerate();
-            $eventarg = event(new UserRegistered($user));
+            event(new UserRegistered($user));
             // dd($eventarg);
 
             

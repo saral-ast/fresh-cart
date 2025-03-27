@@ -7,6 +7,7 @@ use App\Http\Controllers\User\HomeController;
 use App\Http\Controllers\User\OrderPlacedController;
 use App\Http\Controllers\User\ProductController;
 use App\Http\Controllers\User\CheckoutController;
+use App\Http\Controllers\User\ProfileCOntroller;
 use App\Models\Order;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
@@ -24,6 +25,10 @@ Route::middleware("guest:user")->group(function() {
 
 Route::middleware("auth:user")->group(function() {
     Route::post("logout", [LoginController::class, "destroy"])->name("user.logout");
+
+    Route::get('/profile',[ProfileCOntroller::class,'index'])->name('user.profile');
+    Route::post('/profile',[ProfileCOntroller::class,'update'])->name('user.profile.update');
+
     Route::get("/cart",[CartController::class, 'show'])->name('cart.show');
     Route::post('/cart/update', [CartController::class, 'update'])->name('cart.update');
     Route::post("/cart/{slug}",[CartController::class, "store"])->name('cart.store');
@@ -40,6 +45,7 @@ Route::get('/categories/{slug}',[CategoryController::class,'show']) ->name('user
 
 Route::get('/products', [ProductController::class,'index'])->name('user.product.index');
 Route::get('/products/{slug}', [ProductController::class,'show'])->name('user.product.show');
+Route::get('/search/products', [ProductController::class,'search'])->name('user.product.search');
 Route::get('/contact', function () {
     return view('contact');
 });
