@@ -230,6 +230,13 @@
         <main class="max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
             {{ $slot }}
         </main>
+        <!-- Static Block Footer Content -->
+        @php
+            use App\Helpers\StaticBlockHelper;
+        @endphp
+        <div class="mt-8 pt-6 border-t border-gray-200">
+            {!! StaticBlockHelper::render('footer', '') !!}
+        </div>
 
         <script src="https://cdn.jsdelivr.net/npm/flowbite@3.1.2/dist/flowbite.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>

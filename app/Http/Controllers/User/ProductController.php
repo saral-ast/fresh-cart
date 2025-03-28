@@ -8,6 +8,38 @@ use Illuminate\Http\Request;
 
 class ProductController extends Controller
 {
+    public function filter(Request $request)
+    {
+        try {
+            $query = Product::query();
+
+            // Apply category filter only if a specific category is selected
+            if ($request->has('category_id') && !empty($request->category_id)) {
+                $query->where('category_id', $request->category_id);
+            }
+
+            // Apply price sorting
+            if ($request->has('sort_price')) {
+                $direction = $request->sort_price === 'asc' ? 'asc' : 'desc';
+                $query->orderBy('price', $direction);
+            } else {
+                $query->latest('id');
+            }
+
+            $products = $query->with('category')->paginate(8);
+
+            return response()->json([
+                'success' => true,
+                'products' => $products
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => $e->getMessage()
+            ], 500);
+        }
+    }
+
     public function index(Request $request)
     {
         try {

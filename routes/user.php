@@ -42,8 +42,10 @@ Route::middleware("auth:user")->group(function() {
 Route::get('/', [HomeController::class,'index'] )->name('home'); 
 Route::get('/categories',[CategoryController::class,'index']);
 Route::get('/categories/{slug}',[CategoryController::class,'show']) ->name('user.category.show');
+Route::get('/api/categories/with-count', [CategoryController::class, 'getWithCount']);
 
 Route::get('/products', [ProductController::class,'index'])->name('user.product.index');
+Route::get('/api/products/filter', [ProductController::class, 'filter']);
 Route::get('/products/{slug}', [ProductController::class,'show'])->name('user.product.show');
 Route::get('/search/products', [ProductController::class,'search'])->name('user.product.search');
 Route::get('/contact', function () {
