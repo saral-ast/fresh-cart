@@ -69,6 +69,25 @@
                         </div>
                     </form>
                 </div>
+                
+                <!-- Shipping Addresses Section -->                
+                <div class="mt-8 bg-white shadow-lg rounded-xl p-6">
+                    <h2 class="text-2xl font-semibold text-gray-800 mb-6">My Addresses</h2>
+                    
+                    <div class="space-y-4">
+                        @forelse($shippingAddresses as $address)
+                            <div class="border border-gray-200 rounded-lg p-4 hover:shadow-md transition duration-200">
+                                <p class="text-gray-800">{{ $address->address }}</p>
+                                <p class="text-gray-600 text-sm">{{ $address->city }}, {{ $address->state }}, {{ $address->postal_code }}</p>
+                                <p class="text-gray-600 text-sm">{{ $address->country }}</p>
+                            </div>
+                        @empty
+                            <div class="text-center py-4">
+                                <p class="text-gray-500">No saved addresses found.</p>
+                            </div>
+                        @endforelse
+                    </div>
+                </div>
             </div>
 
             <!-- Right: Scrollable Order History -->
@@ -109,6 +128,18 @@
                                         @endforeach
                                     </ul>
                                 </div>
+                                
+                                <!-- Shipping Address for this Order -->
+                                @if($order->address)
+                                <div class="mt-4 pt-4 border-t border-gray-200">
+                                    <h3 class="text-gray-700 font-medium mb-2">Shipping Address:</h3>
+                                    <div class="text-sm text-gray-600 bg-gray-50 p-3 rounded-lg">
+                                        <p>{{ $order->address->address }}</p>
+                                        <p>{{ $order->address->city }}, {{ $order->address->state }}, {{ $order->address->postal_code }}</p>
+                                        <p>{{ $order->address->country }}</p>
+                                    </div>
+                                </div>
+                                @endif
                             </div>
                         @empty
                             <div class="text-center py-8">

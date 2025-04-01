@@ -1,13 +1,14 @@
 <x-admin-layout>
     <div class="p-10 space-y-6">
         <!-- Welcome Section -->
-        <div class="bg-white rounded-lg shadow-md p-6 flex items-center justify-between 
-                    bg-cover bg-center h-50" 
-             style="background-image: url('{{ asset('images/grocery-banner.png') }}');">
-            <div>
+        <div class="bg-white rounded-lg shadow-md p-6 flex items-center justify-between bg-cover bg-center h-50" style="background-image: url('{{ asset('images/grocery-banner.png') }}');">
+            <div class="py-5">
                 <h1 class="text-2xl font-bold">Welcome back! FreshCart</h1>
-                <p class="text-gray-600">FreshCart is a simple & clean design for developers and designers.</p>
-                <button class="bg-green-600 text-white px-4 py-2 mt-4 rounded-md">Create Product</button>
+                <p class="text-gray-600">Add new products to your inventory with ease.</p>
+                <a href="{{ route('admin.product.create') }}" 
+                   class="inline-flex items-center bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-lg font-semibold transition shadow-md mt-4">
+                    Create Product
+                </a>
             </div>
         </div>
 

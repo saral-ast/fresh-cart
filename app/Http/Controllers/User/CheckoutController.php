@@ -8,13 +8,13 @@ use App\Models\Address;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\Payment;
+use App\Models\ShippingAddress;
 use App\Services\CartService;
 use App\Services\OrderService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
-use PgSql\Lob;
 
 class CheckoutController extends Controller
 {
@@ -41,7 +41,7 @@ class CheckoutController extends Controller
             ]);
         } catch (\Exception $e) {
             return redirect()
-                ->route('cart.index')
+                ->route('cart.show')
                 ->with('error', 'Failed to load checkout page: ' . $e->getMessage());
         }
     }
@@ -49,37 +49,43 @@ class CheckoutController extends Controller
     public function checkout(Request $request)
     {
         try {
+            // dd($request->all());
             $user = Auth::user();
             $cart = $this->cartService->getCart();
-
+            
             if (empty($cart)) {
                 return response()->json([
                     'success' => false,
                     'message' => 'Cart is empty'
                 ], 400);
             }
-
-            // Validate request data
-            $request->validate([
-                'address' => 'required|string|max:255',
-                'city' => 'required|string|max:100',
-                'state' => 'required|string|max:100',
-                'country' => 'required|string|max:100',
-                'postal_code' => 'required|string|max:20',
-            ]);
+          
+            // Get address data
+            if (!$request->has('saved_address')) {
+                // Validate new address input
+                $addressData = $request->validate([
+                    'address' => 'required|string|max:255',
+                    'city' => 'required|string|max:255',
+                    'state' => 'required|string|max:255',
+                    'country' => 'required|string|max:255',
+                    'postal_code' => 'required|string|max:255',
+                ]);
+            } else {
+                // Get saved address
+                $address = Address::where('id', $request->saved_address)->first();
+                if (!$address) {
+                    return response()->json([
+                        'success' => false,
+                        'message' => 'Address not found'
+                    ], 400);
+                }
+                $addressData = $address->toArray();
+            }
 
             DB::beginTransaction();
-
             // Store address data
-            $addressData = [
-                'address' => $request->address,
-                'city' => $request->city,
-                'state' => $request->state,
-                'country' => $request->country,
-                'postal_code' => $request->postal_code,
-            ];
             $this->orderService->storeAddress($addressData);
-
+            
             // Store cart data
             $this->orderService->storeCart($cart);
 
@@ -90,14 +96,15 @@ class CheckoutController extends Controller
                 'status' => 'pending'
             ];
             $this->orderService->storePayment($paymentData);
-
+       
+            // dd($total);
             // Create order
             $order = Order::create([
                 'user_id' => $user->id,
                 'total' => $total,
                 'status' => 'pending'
             ]);
-
+         
             // Create order items
             foreach ($cart as $item) {
                 OrderItem::create([
@@ -108,7 +115,8 @@ class CheckoutController extends Controller
                     'price' => $item['price']
                 ]);
             }
-
+        
+            
             // Create payment
             Payment::create([
                 'order_id' => $order->id,
@@ -116,29 +124,27 @@ class CheckoutController extends Controller
                 'amount' => $order->total,
                 'status' => 'pending'
             ]);
+        
 
-            // Create address
-            Address::create([
-                'user_id' => $user->id,
-                'address' => $request->address,
-                'city' => $request->city,
-                'state' => $request->state,
-                'country' => $request->country,
-                'postal_code' => $request->postal_code,
-            ]);
+            // Handle address storage
+            $addressData['user_id'] = $user->id;
+            if ($request->make_default === 'on' && !$request->has('saved_address')) {
+                Address::create($addressData);
+            }
+           
+            
+            $addressData['order_id'] = $order->id;
+            // dd($addressData);
+            ShippingAddress::create($addressData);
+            // dd($order);
 
             DB::commit();
 
             // Clear cart and order data
             $this->cartService->clearCart();
             $this->orderService->clearOrderData();
-
             Log::info('Firing OrderPlaced event for order: ' . $order->id);
-            // dd($order);
             event(new OrderPlaced($order));
-           
-
-
 
             return redirect()
                 ->route('order.success', ['order' => $order->id])

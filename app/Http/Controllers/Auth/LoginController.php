@@ -53,7 +53,7 @@ class LoginController extends Controller
             throw $e; // Re-throw validation exceptions for Laravel's default handling
         } catch (\Exception $e) {
             return redirect()
-                ->route('login')
+                ->route('home')
                 ->with('error', 'Login failed: ' . $e->getMessage());
         }
     }
