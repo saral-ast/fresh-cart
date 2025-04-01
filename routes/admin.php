@@ -34,6 +34,9 @@ Route::prefix("admin")->group(function() {
         Route::get('/categories/{category}/edit',[CategoryController::class,'edit'])->name('admin.categories.edit');
         Route::patch('/categories/{category}',[CategoryController::class,'update'])->name('admin.categories.update');
         Route::delete('/categories/{category}',[CategoryController::class,'destroy'])->name('admin.categories.destroy');
+        Route::get('/categories/trash',[CategoryController::class,'trash'])->name('admin.categories.trash');
+        Route::post('/categories/{id}/restore',[CategoryController::class,'restore'])->name('admin.categories.restore');
+        Route::delete('/categories/{id}/force-delete',[CategoryController::class,'forceDelete'])->name('admin.categories.force-delete');
 
         //product
         Route::get('/products',[ProductController::class,'index'])->name('admin.product.index');
@@ -42,6 +45,9 @@ Route::prefix("admin")->group(function() {
         Route::get('/products/{product}/edit',[ProductController::class,'edit'])->name('admin.product.edit');
         Route::patch('/products/{product}',[ProductController::class,'update'])->name('admin.product.update');  
         Route::delete('/products/{product}',[ProductController::class,'destroy'])->name('admin.product.destroy');
+        Route::get('/products/trash',[ProductController::class,'trash'])->name('admin.product.trash');
+        Route::post('/products/{id}/restore',[ProductController::class,'restore'])->name('admin.product.restore');
+        Route::delete('/products/{id}/force-delete',[ProductController::class,'forceDelete'])->name('admin.product.force-delete');
 
         //orders
         Route::get('/orders', [OrderController::class, 'index'])->name('admin.orders.index');

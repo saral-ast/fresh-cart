@@ -3,14 +3,19 @@
         <!-- Page Title & Add Button -->
         <h2 class="text-3xl font-semibold mb-6 text-gray-800">Products</h2>
 
-        <!-- Search and Add Category Button -->
-        <div class="flex justify-between items-center">
+        <!-- Search, Trash Link, and Add Category Button -->
+        <div class="flex justify-between items-center mb-6">
             <div class="flex items-center space-x-4">
                 <select id="featuredFilter" class="px-8 py-2 text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors duration-200">
                     <option value="all">All Products</option>
                     <option value="featured">Featured Only</option>
                     <option value="unfeatured">Unfeatured Only</option>
                 </select>
+                <!-- Trash Bin Link -->
+                <a href="{{ route('admin.product.trash') }}"
+                   class="bg-red-600 hover:bg-red-700 text-white px-6 py-2 rounded-lg font-semibold transition shadow-md flex items-center">
+                    <i class="fas fa-trash-alt mr-2"></i>Trashed Products
+                </a>
             </div>
             <a href="{{ route('admin.product.create') }}"
                class="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-lg font-semibold transition shadow-md">
@@ -19,7 +24,7 @@
         </div>
 
         <!-- Products Table -->
-        <div class="bg-white shadow-lg rounded-lg overflow-hidden mt-8">
+        <div class="bg-white shadow-lg rounded-lg overflow-hidden">
             <table class="w-full border border-gray-200">
                 <thead class="bg-gray-200 text-gray-700 text-sm font-semibold">
                     <tr>
@@ -73,19 +78,18 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="6" class="p-6 text-center text-gray-500 text-lg">No products available</td>
+                            <td colspan="7" class="p-6 text-center text-gray-500 text-lg">No products available</td>
                         </tr>
                     @endforelse
                 </tbody>
             </table>
-            
         </div>
         <div class="mt-6">
-            {{ $products->links() }}
+            {{ $products->links('pagination::tailwind') }}
         </div>
-        
     </div>
 
+    <!-- Delete Confirmation Modal -->
     <div id="popup-modal" tabindex="-1" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
         <div class="relative p-4 w-full max-w-md max-h-full">
             <div class="relative bg-white rounded-lg shadow-sm">
@@ -101,12 +105,11 @@
                     </svg>
                     <h3 class="mb-5 text-lg font-normal text-gray-500">Are you sure you want to delete this Product?</h3>
                     <form action="{{ route('admin.product.destroy', '') }}" method="POST" class="inline-block ml-3" id="deleteProductForm">
-                          @csrf
-                          @method('DELETE')
-                          <button type="submit" class="text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center">
-                              Yes, I'm sure
-                          </button>
-                      </form>
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center">
+                            Yes, I'm sure
+                        </button>
                     </form>
                     <button data-modal-hide="popup-modal" type="button" class="py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100">
                         No, cancel
@@ -115,6 +118,8 @@
             </div>
         </div>
     </div>
+
+    <!-- Scripts -->
     @push('scripts')
     <script>
     $(document).ready(function () {
@@ -126,8 +131,8 @@
         });
 
         $('#featuredFilter').on('change', function() {
-        const filterValue = $(this).val();
-        const rows = $('.product-row');
+            const filterValue = $(this).val();
+            const rows = $('.product-row');
 
             rows.each(function() {
                 const featuredAttr = $(this).data('featured');
@@ -150,4 +155,6 @@
     </script>
     @endpush    
 
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </x-admin-layout>

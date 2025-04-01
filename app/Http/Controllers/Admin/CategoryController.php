@@ -104,14 +104,51 @@ class CategoryController extends Controller
     public function destroy(Category $category)
     { 
         try{
-            if ($category->image) {
-                Storage::disk('public')->delete($category->image);
-            }   
+            $category->products()->delete();
             $category->delete();
-            
-            return redirect('admin/categories')->with('success', 'Category deleted successfully');
+            return redirect('admin/categories')->with('success', 'Category moved to trash successfully');
         }catch(\Exception $e){
             return redirect()->route('admin.categories')->with('error','Category is not deleted');
+        }
+    }
+    
+    public function trash()
+    {
+        try{
+            $trashedCategories = Category::onlyTrashed()->latest()->paginate(5);
+            return view('admin.categories.trash', ['categories' => $trashedCategories]);
+        }catch(\Exception $e){
+            return redirect()->route('admin.categories')->with('error','Something went wrong');
+        }
+    }
+    
+    public function restore($id)
+    {
+        try{
+            $category = Category::onlyTrashed()->findOrFail($id);
+            $category->products()->onlyTrashed()->restore();
+            $category->restore();
+            
+            return redirect()->route('admin.categories.trash')->with('success', 'Category restored successfully');
+        }catch(\Exception $e){
+            return redirect()->route('admin.categories.trash')->with('error','Category could not be restored');
+        }
+    }
+    
+    public function forceDelete($id)
+    {
+        try{
+            $category = Category::onlyTrashed()->findOrFail($id);
+            
+            if ($category->image) {
+                Storage::disk('public')->delete($category->image);
+            }
+            
+            $category->forceDelete();
+            
+            return redirect()->route('admin.categories.trash')->with('success', 'Category permanently deleted successfully');
+        }catch(\Exception $e){
+            return redirect()->route('admin.categories.trash')->with('error','Category could not be permanently deleted');
         }
     }
 }

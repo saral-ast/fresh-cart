@@ -16,7 +16,7 @@ class HomeController extends Controller
             $featuredCategories = Category::where('featured', true)->get();
             $categories = Category::all();
             $featuredProducts = Product::where('featured', true)->paginate(4);
-
+            // dd($featuredProducts);
             return view('user.home', [
                 'featuredCategories' => $featuredCategories,
                 'categories' => $categories,

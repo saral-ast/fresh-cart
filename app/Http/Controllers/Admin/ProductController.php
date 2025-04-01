@@ -120,19 +120,65 @@ class ProductController extends Controller
     public function destroy(Request $request, Product $product)
     {
         try {
-            if ($product->image) {
-                Storage::disk('public')->delete($product->image);
-            }
-            
             $product->delete();
             
             return redirect()
                 ->route('admin.product.index')
-                ->with('success', 'Product deleted successfully');
+                ->with('success', 'Product moved to trash successfully');
         } catch (\Exception $e) {
             return redirect()
                 ->route('admin.product.index')
                 ->with('error', 'Failed to delete product: ' . $e->getMessage());
+        }
+    }
+    
+    public function trash()
+    {
+        try {
+            $trashedProducts = Product::onlyTrashed()->with('category')->paginate(5);
+            
+            return view('admin.products.trash', ['products' => $trashedProducts]);
+        } catch (\Exception $e) {
+            return redirect()
+                ->route('admin.product.index')
+                ->with('error', 'Failed to load trashed products: ' . $e->getMessage());
+        }
+    }
+    
+    public function restore($id)
+    {
+        try {
+            $product = Product::onlyTrashed()->findOrFail($id);
+            $product->restore();
+            
+            return redirect()
+                ->route('admin.product.trash')
+                ->with('success', 'Product restored successfully');
+        } catch (\Exception $e) {
+            return redirect()
+                ->route('admin.product.trash')
+                ->with('error', 'Failed to restore product: ' . $e->getMessage());
+        }
+    }
+    
+    public function forceDelete($id)
+    {
+        try {
+            $product = Product::onlyTrashed()->findOrFail($id);
+            
+            if ($product->image) {
+                Storage::disk('public')->delete($product->image);
+            }
+            
+            $product->forceDelete();
+            
+            return redirect()
+                ->route('admin.product.trash')
+                ->with('success', 'Product permanently deleted successfully');
+        } catch (\Exception $e) {
+            return redirect()
+                ->route('admin.product.trash')
+                ->with('error', 'Failed to permanently delete product: ' . $e->getMessage());
         }
     }
 }

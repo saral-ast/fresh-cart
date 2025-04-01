@@ -3,7 +3,7 @@
         <!-- Page Title -->
         <h2 class="text-2xl font-bold text-gray-800">Categories</h2>
 
-        <!-- Search and Add Category Button -->
+        <!-- Search, Trash Link, and Add Category Button -->
         <div class="flex justify-between items-center p-4">
             <div class="flex items-center space-x-4">
                 <select id="categoryFeaturedFilter" class="px-8 py-2 text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors duration-200">
@@ -11,6 +11,11 @@
                     <option value="featured">Featured</option>
                     <option value="unfeatured">Non-Featured</option>
                 </select>
+                <!-- Trash Bin Link -->
+                <a href="{{ route('admin.categories.trash') }}"
+                   class="bg-red-600 hover:bg-red-700 text-white px-5 py-2 rounded-lg font-semibold flex items-center">
+                    <i class="fas fa-trash-alt mr-2"></i>Trashed Categories
+                </a>
             </div>
             <a href="{{ route('admin.categories.create') }}" 
                class="bg-green-600 hover:bg-green-700 text-white px-5 py-2 rounded-lg font-semibold">
@@ -19,54 +24,52 @@
         </div>
 
         <!-- Categories Tables -->
-        
-            <div class="bg-white shadow rounded-lg">
-              
-                <table class="w-full border border-gray-200">
-                    <thead class="bg-gray-100 border-b">
-                        <tr class="text-gray-700">
-                            <th class="px-6 py-3 text-left font-semibold">Name</th>
-                            <th class="px-6 py-3 text-left font-semibold">Slug</th>
-                            <th class="px-6 py-3 text-left font-semibold">Image</th>
-                            <th class="px-6 py-3 text-left font-semibold">Featured</th>
-                            <th class="px-6 py-3 text-left font-semibold">Created At</th>
-                            <th class="px-6 py-3 text-center font-semibold">Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody class="divide-y">
-                        @foreach ($categories as $category)
-                            <tr class="hover:bg-gray-50 transition category-row" data-featured="{{ $category->featured ? 'true' : 'false' }}">
-                                <td class="px-6 py-3">{{ $category->name }}</td>
-                                <td class="px-6 py-3">{{ $category->slug }}</td>
-                                <td class="px-6 py-3">
-                                    <div class="w-16 h-16 overflow-hidden border rounded-lg">
-                                        <img src="{{ asset('storage/' . $category->image) }}" 
-                                             onerror="this.onerror=null; this.src='/images/placeholder.png';" 
-                                             class="object-cover w-full h-full">
-                                    </div>
-                                </td>
-                                <td class="px-6 py-3">
-                                    @if($category->featured)
-                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
-                                            <span class="material-icons text-sm mr-1">star</span>
-                                            Featured
-                                        </span>
-                                    @else
-                                        <span class="text-gray-400">-</span>
-                                    @endif
-                                </td>
-                                <td class="px-6 py-3">{{ $category->created_at->format('d M Y h:i A') }}</td>
-                                <td class="px-6 py-3 text-center space-x-4">
+        <div class="bg-white shadow rounded-lg">
+            <table class="w-full border border-gray-200">
+                <thead class="bg-gray-100 border-b">
+                    <tr class="text-gray-700">
+                        <th class="px-6 py-3 text-left font-semibold">Name</th>
+                        <th class="px-6 py-3 text-left font-semibold">Slug</th>
+                        <th class="px-6 py-3 text-left font-semibold">Image</th>
+                        <th class="px-6 py-3 text-left font-semibold">Featured</th>
+                        <th class="px-6 py-3 text-left font-semibold">Created At</th>
+                        <th class="px-6 py-3 text-center font-semibold">Actions</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y">
+                    @foreach ($categories as $category)
+                        <tr class="hover:bg-gray-50 transition category-row" data-featured="{{ $category->featured ? 'true' : 'false' }}">
+                            <td class="px-6 py-3">{{ $category->name }}</td>
+                            <td class="px-6 py-3">{{ $category->slug }}</td>
+                            <td class="px-6 py-3">
+                                <div class="w-16 h-16 overflow-hidden border rounded-lg">
+                                    <img src="{{ asset('storage/' . $category->image) }}" 
+                                         onerror="this.onerror=null; this.src='/images/placeholder.png';" 
+                                         class="object-cover w-full h-full">
+                                </div>
+                            </td>
+                            <td class="px-6 py-3">
+                                @if($category->featured)
+                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
+                                        <span class="material-icons text-sm mr-1">star</span>
+                                        Featured
+                                    </span>
+                                @else
+                                    <span class="text-gray-400">-</span>
+                                @endif
+                            </td>
+                            <td class="px-6 py-3">{{ $category->created_at->format('d M Y h:i A') }}</td>
+                            <td class="px-6 py-3 text-center space-x-4">
                                 <a href="{{ route('admin.categories.edit', $category->id) }}" class="text-blue-600 hover:text-blue-800 font-medium">Edit</a>
-                                    <span class="mx-2 text-gray-400">|</span>
-                                    <button data-modal-target="popup-modal" data-modal-toggle="popup-modal" class="text-red-600 hover:text-red-800 font-medium" data-category-id="{{ $category->id }}">Delete</button>
-                                </td>
-                            </tr>
-                        @endforeach
-                    </tbody>
-                </table>
-            </div>
-            {{$categories->links()}}
+                                <span class="mx-2 text-gray-400">|</span>
+                                <button data-modal-target="popup-modal" data-modal-toggle="popup-modal" class="text-red-600 hover:text-red-800 font-medium" data-category-id="{{ $category->id }}">Delete</button>
+                            </td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
+        {{ $categories->links() }}
     </div>
 
     <!-- Delete Confirmation Modal -->
@@ -84,14 +87,13 @@
                         <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 11V6m0 8h.01M19 10a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
                     </svg>
                     <h3 class="mb-5 text-lg font-normal text-gray-500">Are you sure you want to delete this Category?</h3>
-                      <form action="{{ route('admin.categories.destroy', '') }}" method="POST" class="inline-block ml-3" id="deleteCategoryForm">
-                          @csrf
-                          @method('DELETE')
-                          <button type="submit" class="text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center">
-                              Yes, I'm sure
-                          </button>
-                      </form>
-                    {{-- </form> --}}
+                    <form action="{{ route('admin.categories.destroy', '') }}" method="POST" class="inline-block ml-3" id="deleteCategoryForm">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center">
+                            Yes, I'm sure
+                        </button>
+                    </form>
                     <button data-modal-hide="popup-modal" type="button" class="py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100">
                         No, cancel
                     </button>
@@ -99,23 +101,19 @@
             </div>
         </div>
     </div>
-    
 
     @push('scripts')
-    {{-- <script src="{{ asset('js/featured-filter.js') }}"></script> --}}
     <script>
         $(document).ready(function () {
-            
-
             $('button[data-modal-toggle="popup-modal"]').click(function() {
                 console.log('clicked');
                 const categoryId = $(this).data('category-id');
                 const form = $('#deleteCategoryForm');        
                 const action = form.attr('action');
                 form.attr('action', `${action}/${categoryId}`);
-                // form.attr('action', `${action}/${categoryId}`);
             });
-            //filter 
+
+            // Filter 
             $('#categoryFeaturedFilter').on('change', function() {
                 const filterValue = $(this).val();
                 const rows = $('.category-row');
@@ -136,7 +134,6 @@
                     }
                 });
             });
-
         });
     </script>
     @endpush    
