@@ -48,6 +48,9 @@ Route::get('/products', [ProductController::class,'index'])->name('user.product.
 Route::get('/api/products/filter', [ProductController::class, 'filter']);
 Route::get('/products/{slug}', [ProductController::class,'show'])->name('user.product.show');
 Route::get('/search/products', [ProductController::class,'search'])->name('user.product.search');
+
+// Static Pages
+Route::get('/page/{slug}', [\App\Http\Controllers\User\PageController::class, 'show'])->name('page');
 Route::get('/contact', function () {
     return view('contact');
 });

@@ -12,8 +12,8 @@ class ProfileController extends Controller
     {
         $user = Auth::user();
         $orders = $user->order()->with(['ordersitem', 'address'])->latest()->get();
-        $shippingAddresses = $user->shippingAddresses()->latest()->get();
-        return view('user.profile.index', compact('user', 'orders', 'shippingAddresses'));
+        $Addresses = $user->addresses()->latest()->get();
+        return view('user.profile.index', compact('user', 'orders', 'Addresses'));
     }
     public function update(Request $request){
         $user = Auth::user();

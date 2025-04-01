@@ -1,6 +1,6 @@
 <x-admin-layout>
     <div class="mb-6">
-        <h1 class="text-2xl font-bold text-gray-900">Create Static Block</h1>
+        <h1 class="text-2xl font-bold text-gray-900">Create Static Page</h1>
         <p class="text-gray-600 mt-1">Add a new static block that can be displayed on the website.</p>
     </div>
 
@@ -81,12 +81,11 @@
             });
 
             // Auto-generate identifier from title
-            $('#title').on('keydown', function() {
+            $('#title').on('blur', function() {
                 if ($('#identifier').val() === '') {
                     const title = $(this).val();
                     $.get('/admin/generate-slug', { name: title }, function(data) {
                         $('#identifier').val(data.slug);
-                        console.log(data.slug);
                     });
                 }
             });

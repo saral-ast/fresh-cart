@@ -31,12 +31,26 @@
                                    after:bg-green-600 after:transition-all after:duration-300 hover:after:w-full">
                             Home
                         </x-nav-link>
-                        <x-nav-link href="/contact" :active="request()->is('contact')"
-                            class="relative text-gray-700 hover:text-green-600 font-medium transition-all duration-200 
-                                   after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-0.5 
-                                   after:bg-green-600 after:transition-all after:duration-300 hover:after:w-full">
-                            Contact
-                        </x-nav-link>
+                                                    @php
+                                use App\Helpers\StaticPageHelper;
+                                $staticPages = StaticPageHelper::getAllPages();
+                            @endphp
+
+                            @if(count($staticPages) > 0)
+                            <div class="footer-links">
+                                <ul class="space-y-2">
+                                    @foreach($staticPages as $page)
+                                        <x-nav-link href="{{ route('page', $page->slug) }}" :active="request()->is('Contact-us')"
+                                            class="relative text-gray-700 hover:text-green-600 font-medium transition-all duration-200 
+                                               after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-0.5 
+                                               after:bg-green-600 after:transition-all after:duration-300 hover:after:w-full">
+                                            {{ $page->title }}
+                                    </x-nav-link>
+                                    @endforeach
+                                </ul>
+                            </div>
+                            @endif
+                        
                         <x-nav-link href="/products" :active="request()->is('products')"
                             class="relative text-gray-700 hover:text-green-600 font-medium transition-all duration-200 
                                    after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-0.5 

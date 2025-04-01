@@ -75,7 +75,7 @@
                     <h2 class="text-2xl font-semibold text-gray-800 mb-6">My Addresses</h2>
                     
                     <div class="space-y-4">
-                        @forelse($shippingAddresses as $address)
+                        @forelse($Addresses as $address)
                             <div class="border border-gray-200 rounded-lg p-4 hover:shadow-md transition duration-200">
                                 <p class="text-gray-800">{{ $address->address }}</p>
                                 <p class="text-gray-600 text-sm">{{ $address->city }}, {{ $address->state }}, {{ $address->postal_code }}</p>
