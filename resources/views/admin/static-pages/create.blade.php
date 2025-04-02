@@ -1,61 +1,51 @@
 <x-admin-layout>
-    <div class="mb-6">
-        <h1 class="text-2xl font-bold text-gray-900">Create Static Page</h1>
-        <p class="text-gray-600 mt-1">Add a new static block that can be displayed on the website.</p>
-    </div>
+    <div class="flex items-center justify-center h-auto p-6 mt-25">
+        <div class="w-full max-w-2xl bg-white rounded-xl shadow-lg px-8 py-6">
+            <h1 class="text-2xl font-bold text-gray-900 text-center mb-4">
+                <span class="material-icons mr-2 align-middle">description</span>Create Static Page
+            </h1>
 
-    <div class="bg-white rounded-lg shadow-sm overflow-hidden p-6">
-        <form action="{{ route('admin.static-blocks.store') }}" method="POST">
-            @csrf
+            <x-forms.form method="POST" action="{{ route('admin.static-pages.store') }}" id="create-static-page">
+                @csrf
 
-            <div class="grid grid-cols-1 gap-6 mb-6">
-                <div>
-                    <label for="title" class="block text-sm font-medium text-gray-700 mb-1">Title</label>
-                    <input type="text" name="title" id="title" value="{{ old('title') }}" 
-                           class="w-full rounded-md border-gray-300 shadow-sm focus:border-green-500 focus:ring focus:ring-green-200 focus:ring-opacity-50"
-                           required>
-                    @error('title')
-                        <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
-                    @enderror
+                <div class="space-y-4">
+                    <x-forms.input label="Title" name="title" type="text" placeholder="Enter page title" id="title">
+                        <i class="material-icons text-gray-500 absolute left-3 top-1/2 transform -translate-y-1/2">title</i>
+                    </x-forms.input>
+                    <x-forms.input label="Slug" name="slug" type="text" placeholder="Auto Generated Slug" id="pageSlug">
+                        <i class="material-icons text-gray-500 absolute left-3 top-1/2 transform -translate-y-1/2">link</i>
+                    </x-forms.input>
+                    <p class="text-xs text-gray-500 mt-1">The slug will be used in the page URL.</p>
+
+                    <x-forms.field label="Content" name="content">
+                        <div class="relative">
+                            <i class="material-icons text-gray-500 absolute left-3 top-3">edit_note</i>
+                            <textarea name="content" id="summernote" class="w-full pl-10 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500" 
+                                      rows="6">{{ old('content') }}</textarea>
+                        </div>
+                    </x-forms.field>
+
+                    <x-forms.field label="Active" name="is_active">
+                        <label class="inline-flex items-center">
+                            <span class="material-icons mr-2 text-gray-500">toggle_on</span>
+                            <input type="checkbox" name="is_active" id="is_active" class="form-checkbox h-5 w-5 text-green-600" value="1" {{ old('is_active') ? 'checked' : '' }}>
+                            <span class="ml-2 text-gray-700">Mark as active page</span>
+                        </label>
+                    </x-forms.field>
                 </div>
 
-                <div>
-                    <label for="identifier" class="block text-sm font-medium text-gray-700 mb-1">Identifier</label>
-                    <input type="text" name="identifier" id="identifier" value="{{ old('identifier') }}" 
-                           class="w-full rounded-md border-gray-300 shadow-sm focus:border-green-500 focus:ring focus:ring-green-200 focus:ring-opacity-50"
-                           required>
-                    <p class="text-xs text-gray-500 mt-1">Unique identifier used to display this block in templates.</p>
-                    @error('identifier')
-                        <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
-                    @enderror
-                </div>
+                <x-forms.button class="mt-4 w-full bg-green-600 hover:bg-green-700 text-white py-2 rounded-lg text-center font-semibold flex items-center justify-center">
+                    <i class="material-icons mr-2">save</i>
+                    Create Page
+                </x-forms.button>
 
-                <div>
-                    <label for="content" class="block text-sm font-medium text-gray-700 mb-1">Content</label>
-                    <textarea name="content" id="summernote" class="w-full rounded-md border-gray-300 shadow-sm focus:border-green-500 focus:ring focus:ring-green-200 focus:ring-opacity-50"
-                              rows="6">{{ old('content') }}</textarea>
-                    @error('content')
-                        <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
-                    @enderror
-                </div>
-
-                <div class="flex items-center">
-                    <input type="checkbox" name="is_active" id="is_active" value="1" 
-                           class="rounded border-gray-300 text-green-600 shadow-sm focus:border-green-500 focus:ring focus:ring-green-200 focus:ring-opacity-50"
-                           {{ old('is_active') ? 'checked' : '' }}>
-                    <label for="is_active" class="ml-2 block text-sm text-gray-700">Active</label>
-                </div>
-            </div>
-
-            <div class="flex items-center justify-end space-x-3">
-                <a href="{{ route('admin.static-blocks.index') }}" class="px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
-                    Cancel
-                </a>
-                <button type="submit" class="px-4 py-2 bg-green-600 text-white rounded-md text-sm font-medium hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
-                    Create Static Block
-                </button>
-            </div>
-        </form>
+                <p class="text-sm text-gray-600 mt-3 text-center">
+                    <a href="{{ route('admin.static-pages.index') }}" class="text-green-600 hover:underline flex items-center justify-center">
+                        <- Back to Pages
+                    </a>
+                </p>
+            </x-forms.form>
+        </div>
     </div>
 
     @push('scripts')
@@ -80,13 +70,28 @@
                 ]
             });
 
-            // Auto-generate identifier from title
+            let isSlugEdited = false;
+
+            $('#pageSlug').on('input', function() {
+                isSlugEdited = true;
+            });
+
             $('#title').on('blur', function() {
-                if ($('#identifier').val() === '') {
-                    const title = $(this).val();
-                    $.get('/admin/generate-slug', { name: title }, function(data) {
-                        $('#identifier').val(data.slug);
-                    });
+                if (!isSlugEdited) {
+                    const title = $(this).val().trim();
+                    if (title !== '') {
+                        $.ajax({
+                            url: '/admin/generate-slug',
+                            type: 'GET',
+                            data: { name: title },
+                            success: function(response) {
+                                $('#pageSlug').val(response.slug);
+                            },
+                            headers: {
+                                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                            }
+                        });
+                    }
                 }
             });
         });

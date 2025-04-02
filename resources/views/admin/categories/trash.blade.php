@@ -1,79 +1,97 @@
 <x-admin-layout>
-    <div class="p-6">
-        <!-- Page Title & Back Button -->
-        <h2 class="text-3xl font-semibold mb-6 text-gray-800">Trashed Categories</h2>
-
-        <!-- Back Button -->
-        <div class="flex justify-end items-center mb-6">
-            <a href="{{ route('admin.categories') }}"
-               class="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-lg font-semibold transition shadow-md">
-                <i class="fas fa-arrow-left mr-2"></i>Back to Categories
-            </a>
+    <div class="p-6 md:p-10 space-y-8">
+        <!-- Header Section -->
+        <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+            <h2 class="text-2xl md:text-3xl font-bold text-gray-800 flex items-center">
+                <span class="material-icons mr-2 text-gray-600">delete</span>
+                Trashed Categories
+            </h2>
+            
+            <div class="flex flex-col sm:flex-row gap-3">
+                <a href="{{ route('admin.categories') }}"
+                   class="bg-gray-200 hover:bg-gray-300 text-gray-700 px-5 py-2.5 rounded-lg font-medium flex items-center justify-center transition-all">
+                    <span class="material-icons mr-2 text-sm">arrow_back</span>
+                    Back to Categories
+                </a>
+            </div>
         </div>
 
         <!-- Trashed Categories Table -->
-        <div class="bg-white shadow-lg rounded-lg overflow-hidden">
-            <table class="w-full border border-gray-200">
-                <thead class="bg-gray-200 text-gray-700 text-sm font-semibold">
-                    <tr>
-                        <th class="p-4 text-left">Image</th>
-                        <th class="p-4 text-left">Category Name</th>
-                        <th class="p-4 text-left">Slug</th>
-                        <th class="p-4 text-left">Featured</th>
-                        <th class="p-4 text-left">Deleted At</th>
-                        <th class="p-4 text-center">Action</th>
-                    </tr>
-                </thead>
-                <tbody class="text-gray-700 text-sm divide-y divide-gray-200">
-                    @forelse($categories as $category)
-                        <tr class="hover:bg-gray-50 transition">
-                            <td class="p-4">
-                                <div class="w-16 h-16 overflow-hidden rounded-md shadow-sm border">
-                                    <img src="{{ asset('storage/' . $category->image) }}" 
-                                         onerror="this.onerror=null; this.src='/images/placeholder.png';" 
-                                         class="object-cover w-full h-full">
-                                </div>
-                            </td>
-                            <td class="p-4 font-medium">{{ $category->name }}</td>
-                            <td class="p-4">{{ $category->slug }}</td>
-                            <td class="p-4">
-                                @if($category->featured)
-                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
-                                        <i class="fas fa-star text-sm mr-1"></i>
-                                        Featured
-                                    </span>
-                                @else
-                                    <span class="text-gray-400">-</span>
-                                @endif
-                            </td>
-                            <td class="p-4 text-gray-500">{{ $category->deleted_at->format('d M Y h:i A') }}</td>
-                            <td class="p-4 text-center">
-                                <form action="{{ route('admin.categories.restore', $category->id) }}" method="POST" class="inline">
-                                    @csrf
-                                    <button type="submit" 
-                                            class="text-green-600 hover:text-green-800 font-medium">
-                                        Restore
-                                    </button>
-                                </form>
-                                <span class="mx-2 text-gray-400">|</span>
-                                <button type="button" 
-                                        class="text-red-600 hover:text-red-800 font-medium delete-category-btn"
-                                        data-category-id="{{ $category->id }}"
-                                        data-category-name="{{ $category->name }}">
-                                    Delete Permanently
-                                </button>
-                            </td>
+        <div class="bg-white shadow-sm rounded-xl border border-gray-100 overflow-hidden">
+            <div class="overflow-x-auto">
+                <table class="w-full">
+                    <thead>
+                        <tr class="bg-gray-50 text-gray-600 text-sm">
+                            <th class="px-6 py-4 text-left font-semibold">Image</th>
+                            <th class="px-6 py-4 text-left font-semibold">Category Name</th>
+                            <th class="px-6 py-4 text-left font-semibold">Slug</th>
+                            <th class="px-6 py-4 text-left font-semibold">Featured</th>
+                            <th class="px-6 py-4 text-left font-semibold">Deleted At</th>
+                            <th class="px-6 py-4 text-center font-semibold">Actions</th>
                         </tr>
-                    @empty
-                        <tr>
-                            <td colspan="6" class="p-6 text-center text-gray-500 text-lg">
-                                <i class="fas fa-trash-alt text-2xl mb-2"></i>
-                                <p>No trashed categories available</p>
-                            </td>
-                        </tr>
-                    @endforelse
-                </tbody>
-            </table>
+                    </thead>
+                <tbody class="divide-y divide-gray-100">
+                        @forelse($categories as $category)
+                            <tr class="hover:bg-gray-50/50 transition-colors">
+                                <td class="px-6 py-4">
+                                    <div class="w-16 h-16 overflow-hidden rounded-lg border border-gray-200 bg-gray-50 shadow-sm">
+                                        <img src="{{ asset('storage/' . $category->image) }}" 
+                                             onerror="this.onerror=null; this.src='/images/placeholder.png';" 
+                                             class="object-cover w-full h-full">
+                                    </div>
+                                </td>
+                                <td class="px-6 py-4">
+                                    <div class="font-medium text-gray-900">{{ $category->name }}</div>
+                                </td>
+                                <td class="px-6 py-4">
+                                    <span class="text-gray-500 font-mono text-sm">{{ $category->slug }}</span>
+                                </td>
+                                <td class="px-6 py-4">
+                                    @if($category->featured)
+                                        <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
+                                            <span class="material-icons text-xs mr-1">star</span>
+                                            Featured
+                                        </span>
+                                    @else
+                                        <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-600">
+                                            Standard
+                                        </span>
+                                    @endif
+                                </td>
+                                <td class="px-6 py-4">
+                                    <span class="text-gray-500">{{ $category->deleted_at->format('d M Y h:i A') }}</span>
+                                </td>
+                                <td class="px-6 py-4 text-center">
+                                    <div class="flex items-center justify-center gap-3">
+                                        <form action="{{ route('admin.categories.restore', $category->id) }}" method="POST" class="inline">
+                                            @csrf
+                                            <button type="submit" 
+                                                    class="text-green-600 hover:text-green-800 font-medium flex items-center">
+                                                <span class="material-icons text-sm mr-1">restore</span>
+                                                Restore
+                                            </button>
+                                        </form>
+                                        <button type="button" 
+                                                class="text-red-600 hover:text-red-800 font-medium flex items-center delete-category-btn"
+                                                data-category-id="{{ $category->id }}"
+                                                data-category-name="{{ $category->name }}">
+                                            <span class="material-icons text-sm mr-1">delete_forever</span>
+                                            Delete
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                        @empty
+                            <tr>
+                                <td colspan="6" class="px-6 py-10 text-center">
+                                    <div class="text-gray-400 material-icons text-5xl mb-3">delete_outline</div>
+                                    <p class="text-gray-500 text-lg">No trashed categories available</p>
+                                </td>
+                            </tr>
+                        @endforelse
+                    </tbody>
+                </table>
+            </div>
         </div>
 
         <!-- Pagination -->
@@ -99,7 +117,7 @@
                 showCancelButton: true,
                 confirmButtonColor: '#d33',
                 cancelButtonColor: '#3085d6',
-                confirmButtonText: 'Yes, delete it!',
+                confirmButtonText: '<span class="material-icons text-sm mr-1" style="vertical-align: middle">delete_forever</span> Yes, delete it!',
                 cancelButtonText: 'No, cancel'
             }).then((result) => {
                 if (result.isConfirmed) {
@@ -129,6 +147,4 @@
     </script>
     @endpush    
 
-    <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </x-admin-layout>

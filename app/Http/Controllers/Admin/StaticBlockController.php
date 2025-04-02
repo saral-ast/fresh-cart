@@ -12,7 +12,8 @@ class StaticBlockController extends Controller
     public function index()
     {
         try {
-            $staticBlocks = StaticBlock::all();
+            $staticBlocks = StaticBlock::paginate(10);
+            // dd($staticBlocks);
             return view('admin.static-blocks.index', compact('staticBlocks'));
         } catch (\Exception $e) {
             return redirect()

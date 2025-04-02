@@ -12,7 +12,7 @@ class StaticPageController extends Controller
     public function index()
     {
         try {
-            $staticPages = StaticPage::all();
+            $staticPages = StaticPage::paginate(10);
             return view('admin.static-pages.index', compact('staticPages'));
         } catch (\Exception $e) {
             return redirect()
@@ -24,6 +24,7 @@ class StaticPageController extends Controller
     public function create()
     {
         try {
+            // dd('sdfsd');
             return view('admin.static-pages.create');
         } catch (\Exception $e) {
             return redirect()

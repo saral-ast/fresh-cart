@@ -1,19 +1,21 @@
 <x-admin-layout>
-    <div class="mb-6">
-        <h1 class="text-2xl font-bold text-gray-900">Create Static Block</h1>
-        <p class="text-gray-600 mt-1">Add a new static block that can be displayed on the website.</p>
-    </div>
+    <div class="flex items-center justify-center h-auto p-6 mt-25">
+        <div class="w-full max-w-2xl bg-white rounded-xl shadow-lg px-8 py-6">
+            <h1 class="text-2xl font-bold text-gray-900 text-center mb-4">
+                <span class="material-icons mr-2 align-middle">widgets</span>Create Static Block
+            </h1>
 
-    <div class="bg-white rounded-lg shadow-sm overflow-hidden p-6">
-        <form action="{{ route('admin.static-blocks.store') }}" method="POST">
+            <x-forms.form method="POST" action="{{ route('admin.static-blocks.store') }}" id="create-static-block">
             @csrf
 
             <div class="grid grid-cols-1 gap-6 mb-6">
                 <div>
                     <label for="title" class="block text-sm font-medium text-gray-700 mb-1">Title</label>
-                    <input type="text" name="title" id="title" value="{{ old('title') }}" 
-                           class="w-full rounded-md border-gray-300 shadow-sm focus:border-green-500 focus:ring focus:ring-green-200 focus:ring-opacity-50"
-                           required>
+                    <div class="relative">
+                        <span class="material-icons absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500">title</span>
+                        <input type="text" name="title" id="title" value="{{ old('title') }}" 
+                               class="w-full pl-10 rounded-md border-gray-300 shadow-sm focus:border-green-500 focus:ring focus:ring-green-200 focus:ring-opacity-50"
+                               required>
                     @error('title')
                         <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
                     @enderror
@@ -21,10 +23,12 @@
 
                 <div>
                     <label for="identifier" class="block text-sm font-medium text-gray-700 mb-1">Identifier</label>
-                    <input type="text" name="identifier" id="identifier" value="{{ old('identifier') }}" 
-                           class="w-full rounded-md border-gray-300 shadow-sm focus:border-green-500 focus:ring focus:ring-green-200 focus:ring-opacity-50"
-                           required>
-                    <p class="text-xs text-gray-500 mt-1">Unique identifier used to display this block in templates.</p>
+                    <div class="relative">
+                        <span class="material-icons absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500">tag</span>
+                        <input type="text" name="identifier" id="identifier" value="{{ old('identifier') }}" 
+                               class="w-full pl-10 rounded-md border-gray-300 shadow-sm focus:border-green-500 focus:ring focus:ring-green-200 focus:ring-opacity-50"
+                               required>
+                            <p class="text-xs text-gray-500 mt-1">Unique identifier used to display this block in templates.</p>
                     @error('identifier')
                         <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
                     @enderror
@@ -32,14 +36,17 @@
 
                 <div>
                     <label for="content" class="block text-sm font-medium text-gray-700 mb-1">Content</label>
-                    <textarea name="content" id="summernote" class="w-full rounded-md border-gray-300 shadow-sm focus:border-green-500 focus:ring focus:ring-green-200 focus:ring-opacity-50"
-                              rows="6">{{ old('content') }}</textarea>
+                    <div class="relative">
+                        <span class="material-icons absolute left-3 top-3 text-gray-500">edit_note</span>
+                        <textarea name="content" id="summernote" class="w-full pl-10 rounded-md border-gray-300 shadow-sm focus:border-green-500 focus:ring focus:ring-green-200 focus:ring-opacity-50"
+                                  rows="6">{{ old('content') }}</textarea>
                     @error('content')
                         <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
                     @enderror
                 </div>
 
                 <div class="flex items-center">
+                    <span class="material-icons mr-2 text-gray-500">toggle_on</span>
                     <input type="checkbox" name="is_active" id="is_active" value="1" 
                            class="rounded border-gray-300 text-green-600 shadow-sm focus:border-green-500 focus:ring focus:ring-green-200 focus:ring-opacity-50"
                            {{ old('is_active') ? 'checked' : '' }}>
@@ -48,14 +55,16 @@
             </div>
 
             <div class="flex items-center justify-end space-x-3">
-                <a href="{{ route('admin.static-blocks.index') }}" class="px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
+                <a href="{{ route('admin.static-blocks.index') }}" class="px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 flex items-center">
+                    <span class="material-icons mr-1 text-sm">arrow_back</span>
                     Cancel
                 </a>
-                <button type="submit" class="px-4 py-2 bg-green-600 text-white rounded-md text-sm font-medium hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
+                <button type="submit" class="px-4 py-2 bg-green-600 text-white rounded-md text-sm font-medium hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 flex items-center">
+                    <span class="material-icons mr-1 text-sm">save</span>
                     Create Static Block
                 </button>
             </div>
-        </form>
+        </x-forms.form>
     </div>
 
     @push('scripts')

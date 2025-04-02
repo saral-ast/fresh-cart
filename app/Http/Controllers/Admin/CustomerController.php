@@ -41,11 +41,11 @@ class CustomerController extends Controller
         try{
             $request->validated();
             $customer = [
-                'name' => $request->name,
-                'email' => $request->email,
-                'phone' => $request->phone,
-                'password'=> bcrypt($request->password),
-                'status' => (bool)$request->status,
+                'name' => request('name'),
+                'email' => request('email'),
+                'phone' => request('phone'),
+                'status' => (bool)request('status'),
+                'password'=> bcrypt(request('password')),
             ];
             // dd($customer);
             User::create($customer);
@@ -74,14 +74,16 @@ class CustomerController extends Controller
     public function update(CustomerRequest $request, User $customer)
     {
        try{
+        // dd($request->all());
         $request->validated();
          $customer->update([
             'name' => request('name'),
             'email' => request('email'),
             'phone' => request('phone'),
-            'status' => (bool)request('status'),
-            'password'=> bcrypt($request->password),
+            'status' => request('status') == 'true' ? 'active' : 'inactive',
+            // 'password'=> bcrypt($request->password),
         ]);
+        // dd($customer);
         return redirect()->route('admin.customers')->with('success','Customer updated successfully');   
 
        }

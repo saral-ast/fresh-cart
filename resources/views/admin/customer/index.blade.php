@@ -1,58 +1,93 @@
-<x-admin-layout> 
-    <section class="p-6 md:p-12 antialiased">
-        <div class="mx-auto max-w-screen-xl px-4">
-            <h2 class="text-2xl font-bold text-gray-900">Customers</h2>
-        
-            {{-- Title & Add Button --}}
-            <div class="flex justify-between items-center mb-6 mt-3">
-
-                <select id="customerStatus" class="px-8 py-2 text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors duration-200">
-                    <option value="all">All</option>
-                    <option value="active">Active</option>
-                    <option value="inactive">Inactive</option>
-                </select>
+<x-admin-layout>
+    <div class="p-6 md:p-10 space-y-8">
+        <!-- Header Section -->
+        <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+            <h2 class="text-2xl md:text-3xl font-bold text-gray-800 flex items-center">
+                <span class="material-icons mr-2 text-gray-600">people</span>
+                Customers Management
+            </h2>
             
-                {{-- <p class="text-gray-500">Total Customers: {{ $customers->count() }}</p> --}}
-                
+            <div class="flex flex-col sm:flex-row gap-3">
                 <a href="{{ route('admin.customers.create') }}" 
-                    class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg shadow-md transition-all">
-                    + Add New Customer
+                   class="bg-green-600 hover:bg-green-700 text-white px-5 py-2.5 rounded-lg font-medium flex items-center justify-center transition-all shadow-sm">
+                    <span class="material-icons mr-2 text-sm">add</span>
+                    Add Customer
                 </a>
+            </div>
+        </div>
+        
+        <!-- Filters Section -->
+        <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-5">
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+
+                <div class="relative">
+                    <select id="customerStatus" class="pl-10 pr-4 py-2.5 text-gray-700 bg-gray-50 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-100 focus:border-blue-300 transition-all appearance-none">
+                        <option value="all">All Customers</option>
+                        <option value="active">Active Only</option>
+                        <option value="inactive">Inactive Only</option>
+                    </select>
+                    <span class="material-icons absolute left-3 top-2.5 text-gray-500">filter_list</span>
+                </div>
             </div>
 
          
 
-            {{-- Customers Table --}}
-            <div class="overflow-x-auto bg-white border border-gray-200 rounded-lg shadow-md">
-                <table class="w-full text-left border-collapse">
-                    <thead class="bg-gray-100">
-                        <tr>
-                            <th class="px-6 py-3 border-b">Name</th>
-                            <th class="px-6 py-3 border-b">Email</th>
-                            <th class="px-6 py-3 border-b">Phone</th>
-                            <th class="px-6 py-3 border-b">Status</th>
-                            <th class="px-6 py-3 border-b">Date</th>
-                            <th class="px-6 py-3 border-b text-center">Actions</th>
+        </div>
+
+        <!-- Customers Table -->
+        <div class="bg-white shadow-sm rounded-xl border border-gray-100 overflow-hidden">
+            <div class="overflow-x-auto">
+                <table class="w-full">
+                    <thead>
+                        <tr class="bg-gray-50 text-gray-600 text-sm">
+                            <th class="px-6 py-4 text-left font-semibold">Name</th>
+                            <th class="px-6 py-4 text-left font-semibold">Email</th>
+                            <th class="px-6 py-4 text-left font-semibold">Phone</th>
+                            <th class="px-6 py-4 text-left font-semibold">Status</th>
+                            <th class="px-6 py-4 text-left font-semibold">Created At</th>
+                            <th class="px-6 py-4 text-center font-semibold">Actions</th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody class="divide-y divide-gray-100">
                         @foreach ($customers as $customer)
-                            <tr class="border-b border-gray-200 hover:bg-gray-50 transition py-10 customer-row" data-status="{{ $customer->status }}">
-                                <td class="px-6 py-6 font-medium">{{ $customer->name }}</td>
-                                <td class="px-6 py-6">{{ $customer->email }}</td>
-                                <td class="px-6 py-6">{{ $customer->phone ?? '-' }}</td>
-                                <td class="px-6 py-6">
-                                    <span class="px-3 py-2 text-xs font-semibold rounded-lg
-                                        {{ $customer->status === 'active' ? 'bg-green-100 text-green-700' : 'bg-yellow-100 text-yellow-700' }}">
-                                        {{ ucfirst($customer->status) }}
-                                    </span>
+                            <tr class="hover:bg-gray-50/50 transition-colors customer-row" data-status="{{ $customer->status }}">
+                                <td class="px-6 py-4">
+                                    <div class="font-medium text-gray-900">{{ $customer->name }}</div>
                                 </td>
-                                <td class="px-6 py-4">{{ $customer->created_at->format('d M, Y') }}</td>
+                                <td class="px-6 py-4">{{ $customer->email }}</td>
+                                <td class="px-6 py-4">{{ $customer->phone ?? '-' }}</td>
+                                <td class="px-6 py-4">
+                                    @if($customer->status === 'active')
+                                        <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                                            <span class="material-icons text-xs mr-1">check_circle</span>
+                                            Active
+                                        </span>
+                                    @else
+                                        <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
+                                            <span class="material-icons text-xs mr-1">warning</span>
+                                            Inactive
+                                        </span>
+                                    @endif
+                                </td>
+                                <td class="px-6 py-4">
+                                    <span class="text-gray-500">{{ $customer->created_at->format('d M Y h:i A') }}</span>
+                                </td>
                                 <td class="px-6 py-4 text-center">
-                                    <a href="{{ route('admin.customers.edit', $customer->id) }}" 
-                                        class="text-blue-600 hover:text-blue-800 font-medium">Edit</a>
-                                    <span class="mx-2 text-gray-400">|</span>
-                                <button type="button" data-modal-target="popup-modal" data-modal-toggle="popup-modal" class="text-red-600 hover:text-red-800 font-medium" data-customer-id="{{ $customer->id }}">Delete</button>
+                                    <div class="flex items-center justify-center gap-2">
+                                        <a href="{{ route('admin.customers.edit', $customer->id) }}" 
+                                           class="text-blue-600 hover:text-blue-800 bg-blue-50 hover:bg-blue-100 px-3 py-1.5 rounded-lg transition-colors flex items-center">
+                                            <span class="material-icons text-sm mr-1">edit</span>
+                                            Edit
+                                        </a>
+                                        <button data-modal-target="popup-modal" 
+                                                data-modal-toggle="popup-modal" 
+                                                type="button" 
+                                                class="text-red-600 hover:text-red-800 bg-red-50 hover:bg-red-100 px-3 py-1.5 rounded-lg transition-colors flex items-center"
+                                                data-customer-id="{{ $customer->id }}">
+                                            <span class="material-icons text-sm mr-1">delete</span>
+                                            Delete
+                                        </button>
+                                    </div>
                                 </td>
                             </tr>
                         @endforeach
@@ -60,38 +95,37 @@
                 </table>
             </div>
 
-            {{-- Pagination --}}
-            <div class="mt-6">
-                {{ $customers->links() }}
-            </div>
-                
         </div>
-    </section>
+
+        <!-- Pagination -->
+        <div class="mt-6">
+            {{ $customers->links() }}
+        </div>
+    </div>
+    <!-- Delete Confirmation Modal -->
     <div id="popup-modal" tabindex="-1" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
         <div class="relative p-4 w-full max-w-md max-h-full">
             <div class="relative bg-white rounded-lg shadow-sm">
                 <button type="button" class="absolute top-3 end-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center" data-modal-hide="popup-modal">
-                    <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
-                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
-                    </svg>
+                    <span class="material-icons text-sm">close</span>
                     <span class="sr-only">Close modal</span>
                 </button>
                 <div class="p-4 md:p-5 text-center">
-                    <svg class="mx-auto mb-4 text-gray-400 w-12 h-12" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
-                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 11V6m0 8h.01M19 10a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
-                    </svg>
-                    <h3 class="mb-5 text-lg font-normal text-gray-500">Are you sure you want to delete this Customer?</h3>
-                      <form action="{{ route('admin.customers.destroy', '') }}" method="POST" class="inline-block ml-3" id="deleteCustomerForm">
-                          @csrf
-                          @method('DELETE')
-                          <button type="submit" class="text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center">
-                              Yes, I'm sure
-                          </button>
-                      </form>
-                    {{-- </form> --}}
-                    <button data-modal-hide="popup-modal" type="button" class="py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100">
-                        No, cancel
-                    </button>
+                    <span class="material-icons text-red-500 text-2xl">delete_forever</span>
+                    <h3 class="mb-5 text-lg font-normal text-gray-500 mt-2">Are you sure you want to delete this customer?</h3>
+                    <div class="flex justify-center gap-3">
+                        <form action="{{ route('admin.customers.destroy', '') }}" method="POST" id="deleteCustomerForm">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center">
+                                <span class="material-icons text-sm mr-1">check</span>
+                                Yes, delete it
+                            </button>
+                        </form>
+                        <button data-modal-hide="popup-modal" type="button" class="py-2.5 px-5 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100">
+                            Cancel
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>

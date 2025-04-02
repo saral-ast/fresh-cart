@@ -1,85 +1,202 @@
 <x-admin-layout>
+    <div class="p-6 md:p-10 space-y-8">
+        <!-- Header Section -->
+        <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+            <h2 class="text-2xl md:text-3xl font-bold text-gray-800 flex items-center">
+                <span class="material-icons mr-2 text-gray-600">widgets</span>
+                Static Blocks Management
+            </h2>
+            
+            <div class="flex flex-col sm:flex-row gap-3">
+                <a href="{{ route('admin.static-blocks.create') }}" 
+                   class="bg-green-600 hover:bg-green-700 text-white px-5 py-2.5 rounded-lg font-medium flex items-center justify-center transition-all shadow-sm">
+                    <span class="material-icons mr-2 text-sm">add</span>
+                    Add New Block
+                </a>
+                <!-- Optional: Add a trash link if you implement soft deletes -->
+                <!-- <a href="" 
+                   class="bg-gray-200 hover:bg-gray-300 text-gray-700 px-5 py-2.5 rounded-lg font-medium flex items-center justify-center transition-all">
+                    <span class="material-icons mr-2 text-sm">delete_outline</span>
+                    Trash
+                </a> -->
+            </div>
+        </div>
 
-    <div class="flex justify-between items-center mb-6">
-        <h1 class="text-2xl font-bold text-gray-900">Static Blocks</h1>
-        <a href="{{ route('admin.static-blocks.create') }}" class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition duration-200 font-medium shadow-sm hover:shadow-md flex items-center">
-            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
-            </svg>
-            Add New Block
-        </a>
-    </div>
+        <!-- Filters & Stats Section -->
+        <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-5">
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                <!-- Filter Controls -->
+                <div class="flex flex-wrap items-center gap-3">
+                    <div class="relative">
+                        <select id="statusFilter" class="pl-10 pr-4 py-2.5 text-gray-700 bg-gray-50 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-100 focus:border-blue-300 transition-all appearance-none">
+                            <option value="all">All Blocks</option>
+                            <option value="active">Active Only</option>
+                            <option value="inactive">Inactive Only</option>
+                        </select>
+                        <span class="material-icons absolute left-3 top-2.5 text-gray-500">filter_list</span>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-    <div class="bg-white rounded-lg shadow-sm overflow-hidden">
-        <div class="overflow-x-auto">
-            <table class="min-w-full divide-y divide-gray-200">
-                <thead class="bg-gray-50">
-                    <tr>
-                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Title</th>
-                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Identifier</th>
-                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
-                    </tr>
-                </thead>
-                <tbody class="bg-white divide-y divide-gray-200">
-                    @forelse ($staticBlocks as $block)
-                        <tr>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{{ $block->title }}</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ $block->identifier }}</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full {{ $block->is_active ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800' }}">
-                                    {{ $block->is_active ? 'Active' : 'Inactive' }}
+        <!-- Static Blocks Table -->
+        <div class="bg-white shadow-sm rounded-xl border border-gray-100 overflow-hidden">
+            <div class="overflow-x-auto">
+                <table class="w-full">
+                    <thead>
+                        <tr class="bg-gray-50 text-gray-600 text-sm">
+                            <th class="px-6 py-4 text-left font-semibold">
+                                <span class="flex items-center">
+                                    <span class="material-icons text-xs mr-1">title</span> Title
                                 </span>
-                            </td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                                <div class="flex space-x-2">
-                                    <a href="{{ route('admin.static-blocks.edit', $block) }}" class="text-indigo-600 hover:text-indigo-900">
-                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
-                                        </svg>
-                                    </a>
-                                    <form action="{{ route('admin.static-blocks.destroy', $block) }}" method="POST" class="delete-form inline-block">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="text-red-600 hover:text-red-900">
-                                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
-                                            </svg>
+                            </th>
+                            <th class="px-6 py-4 text-left font-semibold">
+                                <span class="flex items-center">
+                                    <span class="material-icons text-xs mr-1">tag</span> Identifier
+                                </span>
+                            </th>
+                            <th class="px-6 py-4 text-left font-semibold">
+                                <span class="flex items-center">
+                                    <span class="material-icons text-xs mr-1">toggle_on</span> Status
+                                </span>
+                            </th>
+                            <th class="px-6 py-4 text-center font-semibold">
+                                <span class="flex items-center justify-center">
+                                    <span class="material-icons text-xs mr-1">settings</span> Actions
+                                </span>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-100">
+                        @forelse ($staticBlocks as $block)
+                            <tr class="hover:bg-gray-50/50 transition-colors block-row" data-active="{{ $block->is_active ? 'true' : 'false' }}">
+                                <td class="px-6 py-4">
+                                    <div class="font-medium text-gray-900">{{ $block->title }}</div>
+                                </td>
+                                <td class="px-6 py-4">
+                                    <span class="text-gray-500">{{ $block->identifier }}</span>
+                                </td>
+                                <td class="px-6 py-4">
+                                    @if($block->is_active)
+                                        <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                                            <span class="material-icons text-xs mr-1">check_circle</span>
+                                            Active
+                                        </span>
+                                    @else
+                                        <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-red-100 text-red-800">
+                                            <span class="material-icons text-xs mr-1">cancel</span>
+                                            Inactive
+                                        </span>
+                                    @endif
+                                </td>
+                                <td class="px-6 py-4 text-center">
+                                    <div class="flex items-center justify-center gap-2">
+                                        <a href="{{ route('admin.static-blocks.edit', $block) }}" 
+                                           class="text-blue-600 hover:text-blue-800 bg-blue-50 hover:bg-blue-100 px-3 py-1.5 rounded-lg transition-colors flex items-center">
+                                            <span class="material-icons text-sm mr-1">edit</span>
+                                            Edit
+                                        </a>
+                                        <button data-modal-target="popup-modal" 
+                                                data-modal-toggle="popup-modal" 
+                                                type="button" 
+                                                class="text-red-600 hover:text-red-800 bg-red-50 hover:bg-red-100 px-3 py-1.5 rounded-lg transition-colors flex items-center"
+                                                data-block-id="{{ $block->id }}">
+                                            <span class="material-icons text-sm mr-1">delete</span>
+                                            Delete
                                         </button>
-                                    </form>
-                                </div>
-                            </td>
-                        </tr>
-                    @empty
-                        <tr>
-                            <td colspan="4" class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center">No static blocks found</td>
-                        </tr>
-                    @endforelse
-                </tbody>
-            </table>
+                                    </div>
+                                </td>
+                            </tr>
+                        @empty
+                            <tr>
+                                <td colspan="4" class="px-6 py-8 text-center text-gray-500">
+                                    <span class="material-icons text-gray-400 text-4xl mb-3">widgets</span>
+                                    <p class="text-lg">No static blocks available</p>
+                                </td>
+                            </tr>
+                        @endforelse
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Pagination -->
+        <div class="mt-6">
+            {{ $staticBlocks->links() }}
         </div>
     </div>
 
-    <script>
-        $(document).ready(function() {
-            $('.delete-form').on('submit', function(e) {
-                e.preventDefault();
-                var form = $(this);
+    <!-- Delete Confirmation Modal -->
+    <div id="popup-modal" tabindex="-1" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+        <div class="relative p-4 w-full max-w-md max-h-full">
+            <div class="relative bg-white rounded-lg shadow-lg">
+                <button type="button" class="absolute top-3 end-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center" data-modal-hide="popup-modal">
+                    <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
+                    </svg>
+                    <span class="sr-only">Close modal</span>
+                </button>
+                <div class="p-6 text-center">
+                    <div class="flex justify-center mb-4">
+                        <div class="h-16 w-16 rounded-full bg-red-50 flex items-center justify-center">
+                            <span class="material-icons text-red-500 text-2xl">delete_forever</span>
+                        </div>
+                    </div>
+                    <h3 class="mb-1 text-xl font-semibold text-gray-800">Delete Static Block</h3>
+                    <p class="mb-6 text-gray-500">Are you sure you want to delete this block? This action cannot be undone.</p>
+                    <div class="flex justify-center gap-3">
+                        <button data-modal-hide="popup-modal" type="button" class="py-2.5 px-5 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 transition-colors">
+                            Cancel
+                        </button>
+                        <form action="{{ route('admin.static-blocks.destroy', '') }}" method="POST" class="inline-block" id="deleteBlockForm">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center">
+                                <span class="material-icons text-sm mr-1">check</span>
+                                Yes, I'm sure
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
-                Swal.fire({
-                    title: 'Are you sure?',
-                    text: "You won't be able to revert this!",
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonColor: '#d33',
-                    cancelButtonColor: '#3085d6',
-                    confirmButtonText: 'Yes, delete it!'
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        form[0].submit();
-                    }
-                });
+    <!-- Scripts -->
+    @push('scripts')
+    <script>
+    $(document).ready(function () {
+        // Modal handling for delete button
+        $('button[data-modal-toggle="popup-modal"]').click(function() {
+            const blockId = $(this).data('block-id');
+            const form = $('#deleteBlockForm');
+            const baseAction = "{{ route('admin.static-blocks.destroy', '') }}";
+            form.attr('action', `${baseAction.replace(/\/$/, '')}/${blockId}`);
+        });
+
+        // Filter handling
+        $('#statusFilter').on('change', function() {
+            const filterValue = $(this).val();
+            const rows = $('.block-row');
+
+            rows.each(function() {
+                const activeAttr = $(this).data('active');
+                const isActive = activeAttr === true || activeAttr === 'true';
+                
+                switch(filterValue) {
+                    case 'active':
+                        $(this).toggle(isActive);
+                        break;
+                    case 'inactive':
+                        $(this).toggle(!isActive);
+                        break;
+                    default: // 'all'
+                        $(this).show();
+                        break;
+                }
             });
         });
+    });
     </script>
+    @endpush
 </x-admin-layout>

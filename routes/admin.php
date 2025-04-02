@@ -54,6 +54,8 @@ Route::prefix("admin")->group(function() {
         Route::get('/orders', [OrderController::class, 'index'])->name('admin.orders.index');
         Route::get('/orders/{order}', [OrderController::class, 'show'])->name('admin.orders.show');
         Route::patch('/orders/{order}/status', [OrderController::class, 'updateStatus'])->name('admin.orders.update.status');
+
+        //customers
         Route::get('/customers',[CustomerController::class,'index'])->name('admin.customers');
         Route::get('/customer/create',[CustomerController::class,'create'])->name('admin.customers.create');
         Route::post('/customer',[CustomerController::class,'store'])->name('admin.customers.store');
