@@ -4,7 +4,7 @@
         <div class="p-6 flex items-center space-x-2 border-b border-gray-200">
             <a href="{{ route('home') }}" class="flex items-center">
                 <img src="{{ Vite::asset('resources/images/freshcart-logo.svg') }}" class="h-8 w-auto transition-transform duration-200 hover:scale-105" alt="Logo">
-                <span class="ml-2 text-xl font-semibold text-gray-800">Admin</span>
+                {{-- <span class="ml-2 text-xl font-semibold text-gray-800">Admin</span> --}}
             </a>
         </div>
         

@@ -50,10 +50,8 @@ Route::get('/products/{slug}', [ProductController::class,'show'])->name('user.pr
 Route::get('/search/products', [ProductController::class,'search'])->name('user.product.search');
 
 // Static Pages
-Route::get('/page/{slug}', [\App\Http\Controllers\User\PageController::class, 'show'])->name('page');
-Route::get('/contact', function () {
-    return view('contact');
-});
+Route::get('/{slug}', [\App\Http\Controllers\User\PageController::class, 'show'])->name('page');
+
 // Route::get('/products', function () {
 //     return view('products');
 // });

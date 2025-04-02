@@ -8,6 +8,7 @@ use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\StaticBlockController;
 use App\Http\Controllers\Admin\StaticPageController;
 use App\Http\Controllers\Auth\AdminLoginController;
+use App\Http\Controllers\User\PageController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -81,16 +82,10 @@ Route::prefix("admin")->group(function() {
     });
 
 });
-// Route::get('/admin/login', function () {
-//     return view('auth.admin-login');
-// });
-
-
-
-
 
 
 Route::get('/admin/generate-slug', function (Request $request) {
     $slug = Str::slug($request->name);
     return response()->json(['slug' => $slug]);
 });
+

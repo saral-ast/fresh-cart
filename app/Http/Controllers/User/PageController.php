@@ -16,9 +16,11 @@ class PageController extends Controller
      */
     public function show($slug)
     {
+        // dd($slug);
         $page = StaticPage::where('slug', $slug)
             ->where('is_active', 1)
             ->firstOrFail();
+      
 
         return view('user.pages.show', compact('page'));
     }

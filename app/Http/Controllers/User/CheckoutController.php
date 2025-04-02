@@ -80,7 +80,9 @@ class CheckoutController extends Controller
                     ], 400);
                 }
                 $addressData = $address->toArray();
+                unset($addressData['id']);
             }
+            // dd($addressData);
 
             DB::beginTransaction();
             // Store address data
@@ -104,6 +106,7 @@ class CheckoutController extends Controller
                 'total' => $total,
                 'status' => 'pending'
             ]);
+            // dd($order);
          
             // Create order items
             foreach ($cart as $item) {
@@ -115,6 +118,7 @@ class CheckoutController extends Controller
                     'price' => $item['price']
                 ]);
             }
+            // dd($order);
         
             
             // Create payment
@@ -130,10 +134,13 @@ class CheckoutController extends Controller
             $addressData['user_id'] = $user->id;
             if ($request->make_default === 'on' && !$request->has('saved_address')) {
                 Address::create($addressData);
+               
             }
-           
+            
+
             
             $addressData['order_id'] = $order->id;
+            // dd($addressData);
             // dd($addressData);
             ShippingAddress::create($addressData);
             // dd($order);

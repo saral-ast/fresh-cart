@@ -34,7 +34,7 @@
                 <a href="{{ route('home') }}" class="bg-green-600 hover:bg-green-700 text-white py-3 px-6 rounded-lg text-center font-semibold transition duration-200 ease-in-out transform hover:scale-[1.02] focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50">
                     Continue Shopping
                 </a>
-                <a href="#" class="bg-gray-200 hover:bg-gray-300 text-gray-800 py-3 px-6 rounded-lg text-center font-semibold transition duration-200 ease-in-out transform hover:scale-[1.02] focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-opacity-50">
+                <a href="{{ route('user.profile') }}" class="bg-gray-200 hover:bg-gray-300 text-gray-800 py-3 px-6 rounded-lg text-center font-semibold transition duration-200 ease-in-out transform hover:scale-[1.02] focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-opacity-50">
                     View Order History
                 </a>
             </div>
