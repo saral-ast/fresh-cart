@@ -1,31 +1,34 @@
 <x-admin-layout>    
     <section class="bg-white p-6 md:p-10 space-y-8 antialiased">
         <div class="mx-auto max-w-screen-xl px-4 2xl:px-0 mb-6">
-            <h2 class="text-xl font-semibold text-gray-900 sm:text-2xl">Order Management</h2>
+            <h2 class="text-2xl md:text-3xl font-bold text-gray-800 flex items-center">
+                <span class="material-icons mr-2 text-gray-600">shopping_cart</span>
+                Order Management
+            </h2>
             <p class="mt-1 text-sm text-gray-500">View and manage all customer orders</p>
         </div>
 
-        <div class="mt-6 overflow-x-auto bg-white border border-gray-200 rounded-lg shadow-md">
+        <div class="mt-6 overflow-x-auto bg-white border border-gray-100 rounded-xl shadow-sm">
             <table class="w-full text-left">
-                <thead class="bg-gray-50 text-xs text-gray-500 uppercase tracking-wider">
+                <thead class="bg-gray-50 text-gray-600 text-sm">
                     <tr>
-                        <th class="px-6 py-3 border-b">Order ID</th>
-                        <th class="px-6 py-3 border-b">Customer</th>
-                        <th class="px-6 py-3 border-b">Date</th>
-                        <th class="px-6 py-3 border-b">Total</th>
-                        <th class="px-6 py-3 border-b">Status</th>
-                        <th class="px-6 py-3 border-b text-center">Actions</th>
+                        <th class="px-6 py-4 font-semibold border-b border-gray-100">Order ID</th>
+                        <th class="px-6 py-4 font-semibold border-b border-gray-100">Customer</th>
+                        <th class="px-6 py-4 font-semibold border-b border-gray-100">Date</th>
+                        <th class="px-6 py-4 font-semibold border-b border-gray-100">Total</th>
+                        <th class="px-6 py-4 font-semibold border-b border-gray-100">Status</th>
+                        <th class="px-6 py-4 font-semibold border-b border-gray-100 text-center">Actions</th>
                     </tr>
                 </thead>
                 <tbody>
                     @forelse ($orders as $order)
-                        <tr class="border-b border-gray-200 hover:bg-gray-50">
-                            <td class="px-6 py-4 font-medium">#{{ $order->id }}</td>
-                            <td class="px-6 py-4">{{ $order->user->name }}</td>
-                            <td class="px-6 py-4">
+                        <tr class="border-b border-gray-100 hover:bg-gray-50/50 transition-colors">
+                            <td class="px-6 py-4 font-medium text-gray-900">#{{ $order->id }}</td>
+                            <td class="px-6 py-4 text-gray-500">{{ $order->user->name }}</td>
+                            <td class="px-6 py-4 text-gray-500">
                                 {{ $order->created_at->format('d M Y h:i A') }}
                             </td>
-                            <td class="px-6 py-4 font-medium">${{ number_format($order->total, 2) }}</td>
+                            <td class="px-6 py-4 font-medium text-green-600">${{ number_format($order->total, 2) }}</td>
                             <td class="px-6 py-4 whitespace-nowrap">
                                 @php
                                     $statusClasses = [
@@ -36,17 +39,20 @@
                                     ];
                                     $statusClass = $statusClasses[$order->status] ?? 'bg-gray-100 text-gray-800';
                                 @endphp
-                                <span class="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full {{ $statusClass }}">
+                                <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium {{ $statusClass }}">
+                                    <span class="material-icons text-xs mr-1">
+                                        {{ $order->status === 'completed' ? 'check_circle' : 'hourglass_empty'  }}
+                                    </span>
                                     {{ ucfirst($order->status) }}
                                 </span>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-center">
                                 <button type="button" 
-                                    class="preview-btn px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 transition-all"
+                                    class="preview-btn px-3 py-1.5 text-blue-600 hover:text-blue-800 bg-blue-50 hover:bg-blue-100 rounded-lg transition-colors flex items-center justify-center mx-auto"
                                     data-order-id="{{ $order->id }}"
                                     data-modal-target="orderModal"
                                     data-modal-toggle="orderModal">
-                                    <i class="mdi mdi-eye mr-1"></i> Preview
+                                    <span class="material-icons text-sm mr-1">visibility</span> Preview
                                 </button>
                             </td>
                         </tr>
@@ -54,10 +60,8 @@
                         <tr>
                             <td colspan="6" class="px-6 py-10 text-center text-gray-500">
                                 <div class="flex flex-col items-center">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-gray-400 mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
-                                    </svg>
-                                    <p>No orders found</p>
+                                    <span class="material-icons text-gray-400 text-4xl mb-2">shopping_cart</span>
+                                    <p class="text-lg">No orders found</p>
                                     <p class="text-sm mt-1">New orders will appear here</p>
                                 </div>
                             </td>
@@ -68,17 +72,17 @@
             <div class="px-6 py-4">
                 {{ $orders->links() }}
             </div>
-            {{-- {{ $or ders->links() }} --}}
         </div>
 
         <!-- Order Modal -->
         <div id="orderModal" tabindex="-1" aria-hidden="true" class="fixed top-0 left-0 right-0 z-50 hidden w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full">
             <div class="relative w-full max-w-3xl max-h-full">
                 <!-- Modal content -->
-                <div class="relative bg-white rounded-xl shadow-2xl">
+                <div class="relative bg-white rounded-xl shadow-lg">
                     <!-- Modal header -->
-                    <div class="flex items-center justify-between p-5 border-b rounded-t">
-                        <h3 class="text-xl font-semibold text-gray-900">
+                    <div class="flex items-center justify-between p-5 border-b border-gray-100 rounded-t">
+                        <h3 class="text-xl font-semibold text-gray-800 flex items-center">
+                            <span class="material-icons mr-2 text-gray-600">description</span>
                             Order Details
                         </h3>
                         <button type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ml-auto inline-flex justify-center items-center" data-modal-hide="orderModal">
@@ -149,7 +153,7 @@
                         <!-- Order Status Update -->
                         <div class="bg-gray-50 p-4 rounded-lg">
                             <h4 class="text-sm font-semibold text-gray-500 mb-3">Update Order Status</h4>
-                            <select id="order-status" class="w-full bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5">
+                            <select id="order-status" class="w-full bg-white border border-gray-200 text-gray-900 text-sm rounded-lg focus:ring-2 focus:ring-blue-100 focus:border-blue-300 p-2.5 transition-all">
                                 <option value="pending">Pending</option>
                                 <option value="processing">Processing</option>
                                 <option value="completed">Completed</option>
@@ -160,30 +164,27 @@
                         <!-- Order Items Table -->
                         <div>
                             <h4 class="text-sm font-semibold text-gray-500 mb-3">Order Items</h4>
-                            <div class="overflow-x-auto rounded-lg border border-gray-200">
-                                <table class="w-full divide-y divide-gray-200">
-                                    <thead class="bg-gray-50">
+                            <div class="overflow-x-auto rounded-lg border border-gray-100 shadow-sm">
+                                <table class="w-full divide-y divide-gray-100">
+                                    <thead class="bg-gray-50 text-gray-600 text-sm">
                                         <tr>
-                                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Product</th>
-                                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Quantity</th>
-                                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Price</th>
-                                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Subtotal</th>
+                                            <th scope="col" class="px-6 py-4 text-left font-semibold">Product</th>
+                                            <th scope="col" class="px-6 py-4 text-left font-semibold">Quantity</th>
+                                            <th scope="col" class="px-6 py-4 text-left font-semibold">Price</th>
+                                            <th scope="col" class="px-6 py-4 text-left font-semibold">Subtotal</th>
                                         </tr>
                                     </thead>
-                                    <tbody id="order-items-container" class="bg-white divide-y divide-gray-200">
+                                    <tbody id="order-items-container" class="bg-white divide-y divide-gray-100">
                                         <!-- Order items will be inserted here via JavaScript -->
                                     </tbody>
                                 </table>
                             </div>
                         </div>
                     </div>
-                    <div>
-                        
-                    </div>
                     <!-- Modal footer -->
-                    <div class="flex items-center justify-end p-6 space-x-2 border-t border-gray-200 rounded-b">
-                        <button data-modal-hide="orderModal" type="button" class="text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10">Close</button>
-                        <button type="button" id="update-status-btn" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Update Status</button>
+                    <div class="flex items-center justify-end p-6 space-x-2 border-t border-gray-100 rounded-b">
+                        <button data-modal-hide="orderModal" type="button" class="text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-blue-100 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 transition-colors">Close</button>
+                        <button type="button" id="update-status-btn" class="text-white bg-blue-600 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center transition-all">Update Status</button>
                     </div>
                 </div>
             </div>
@@ -244,12 +245,12 @@
                             itemsContainer.empty();
                             
                             data.order.ordersitem.forEach(item => {
-                                const row = $('<tr>').addClass('bg-white border-b');
+                                const row = $('<tr>').addClass('bg-white border-b border-gray-100 hover:bg-gray-50/50 transition-colors');
                                 row.html(`
-                                    <td class="py-4 px-6">${item.product.name}</td>
-                                    <td class="py-4 px-6">${item.quantity}</td>
-                                    <td class="py-4 px-6">$${item.price}</td>
-                                    <td class="py-4 px-6">$${(item.quantity * item.price).toFixed(2)}</td>
+                                    <td class="py-4 px-6 text-gray-900">${item.product.name}</td>
+                                    <td class="py-4 px-6 text-gray-500">${item.quantity}</td>
+                                    <td class="py-4 px-6 text-green-600">$${item.price}</td>
+                                    <td class="py-4 px-6 text-gray-900">$${(item.quantity * item.price).toFixed(2)}</td>
                                 `);
                                 itemsContainer.append(row);
                             });
@@ -284,12 +285,21 @@
                         const statusCell = $(`[data-order-id="${currentOrderId}"]`).closest('tr').find('td:nth-child(5) span');
                         statusCell.text(newStatus.charAt(0).toUpperCase() + newStatus.slice(1));
                         
-                        // Update status color
-                        const statusColor = 
-                            newStatus === 'completed' ? 'green' : 
-                            newStatus === 'processing' ? 'blue' : 
-                            newStatus === 'cancelled' ? 'red' : 'orange';
-                        statusCell.css('backgroundColor', statusColor);
+                        // Update status color and icon
+                        const statusClasses = {
+                            'completed': 'bg-green-100 text-green-800',
+                            'processing': 'bg-blue-100 text-blue-800',
+                            'cancelled': 'bg-red-100 text-red-800',
+                            'pending': 'bg-yellow-100 text-yellow-800'
+                        };
+                        const statusIcons = {
+                            'completed': 'check_circle',
+                            'processing': 'hourglass_empty',
+                            'cancelled': 'cancel',
+                            'pending': 'pending'
+                        };
+                        statusCell.removeClass().addClass(`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium ${statusClasses[newStatus]}`);
+                        statusCell.html(`<span class="material-icons text-xs mr-1">${statusIcons[newStatus]}</span>${newStatus.charAt(0).toUpperCase() + newStatus.slice(1)}`);
                         
                         // Show success message with SweetAlert2
                         const Toast = Swal.mixin({

@@ -126,11 +126,11 @@
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap text-center">
                                     <button type="button" 
-                                        class="preview-btn px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 transition-all"
+                                        class="preview-btn px-3 py-1.5 text-blue-600 hover:text-blue-800 bg-blue-50 hover:bg-blue-100 rounded-lg transition-colors flex items-center justify-center mx-auto"
                                         data-order-id="{{ $order->id }}"
                                         data-modal-target="orderModal"
                                         data-modal-toggle="orderModal">
-                                        Preview
+                                        <span class="material-icons text-sm mr-1">visibility</span> Preview
                                     </button>
                                 </td>
                             </tr>
