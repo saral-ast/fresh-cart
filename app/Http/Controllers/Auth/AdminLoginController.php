@@ -36,7 +36,7 @@ class AdminLoginController extends Controller
 
             $request->session()->regenerate();
             return redirect()
-                ->route('admin.dashboard')
+                ->route('dashboard.index')
                 ->with('success', 'Successfully logged in as admin.');
         } catch (ValidationException $e) {
             throw $e; // Re-throw validation exceptions to maintain Laravel's default behavior

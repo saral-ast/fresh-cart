@@ -175,7 +175,7 @@ class CheckoutController extends Controller
     {
         try {
             $order = Order::findOrFail($orderId);
-
+            // dd($order);
             // Ensure the order belongs to the authenticated user
             if ($order->user_id !== Auth::id()) {
                 abort(403, 'Unauthorized action.');

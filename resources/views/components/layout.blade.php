@@ -33,7 +33,7 @@
                         </x-nav-link>
                                  
 
-                        <x-nav-link href="{{ route('page', 'contact-us') }}" :active="request()->is('page/contact-us')"
+                        <x-nav-link href="{{ route('page', 'contact-us') }}" :active="request()->is('contact-us')"
                             class="relative text-gray-700 hover:text-green-600 font-medium transition-all duration-200 
                                after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-0.5 
                                after:bg-green-600 after:transition-all after:duration-300 hover:after:w-full">
