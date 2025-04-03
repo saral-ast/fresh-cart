@@ -156,4 +156,4 @@ class RoleController extends Controller
             return redirect()->back()->with('error', 'Error deleting role: ' . $e->getMessage());
         }
     }
-} 
+}
