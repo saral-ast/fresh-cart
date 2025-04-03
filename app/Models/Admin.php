@@ -15,4 +15,19 @@ class Admin extends Authenticatable
     
     protected $table = 'admin';
     protected $guarded = [];
+    public function role(){
+        return $this->belongsTo(Role::class,'role_id');
+    }
+    public function hasPermission($permission){
+        if ($this->role->permissions()->where('permission', 'super admin')->exists()) {
+            return true;
+        }
+        // Check if the admin's role has the requested permission
+        // dd($permission);
+        if($this->role) {
+            return $this->role->permissions()->where('permission', $permission)->exists();
+        }
+        
+        return false;
+    }
 }

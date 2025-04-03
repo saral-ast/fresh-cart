@@ -77,7 +77,7 @@
                 </div>
             </div>
         </div>
-
+        @can('manage_orders')
         <!-- Recent Orders Section - Enhanced with better spacing and style -->
         <div class="bg-white rounded-xl shadow-md overflow-hidden">
             <div class="p-6 border-b border-gray-200">
@@ -272,6 +272,7 @@
                 </div>
             </div>
         </div>
+        @endcan
 
         @push('scripts')
         <script>
