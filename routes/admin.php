@@ -97,6 +97,15 @@ Route::prefix("admin")->group(function () {
         Route::patch('/roles/{role}', [RoleController::class, 'update'])->name('admin.roles.update')->can('manage_roles');
         Route::delete('/roles/{role}', [RoleController::class, 'destroy'])->name('admin.roles.destroy')->can('manage_roles');
 
+        // Permissions Management
+        Route::get('/permissions', [PermissionController::class, 'index'])->name('admin.permissions.index')->can('manage_permissions');
+        Route::get('/permissions/create', [PermissionController::class, 'create'])->name('admin.permissions.create')->can('manage_permissions');
+        Route::post('/permissions', [PermissionController::class, 'store'])->name('admin.permissions.store')->can('manage_permissions');
+        Route::get('/permissions/{permission}/edit', [PermissionController::class, 'edit'])->name('admin.permissions.edit')->can('manage_permissions');
+        Route::patch('/permissions/{permission}', [PermissionController::class, 'update'])->name('admin.permissions.update')->can('manage_permissions');
+        Route::delete('/permissions/{permission}', [PermissionController::class, 'destroy'])->name('admin.permissions.destroy')->can('manage_permissions');;
+        Route::delete('/permissions/{permission}', [PermissionController::class, 'destroy'])->name('admin.permissions.destroy')->can('manage_permissions');
+
         // Slug Generator
         Route::get('/generate-slug', function (Request $request) {
             return response()->json(['slug' => Str::slug($request->name)]);

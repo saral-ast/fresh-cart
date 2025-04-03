@@ -120,9 +120,12 @@
                                         ];
                                         $statusClass = $statusClasses[$order->status] ?? 'bg-gray-100 text-gray-800';
                                     @endphp
-                                    <span class="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full {{ $statusClass }}">
-                                        {{ ucfirst($order->status) }}
+                                   <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium {{ $statusClass }}">
+                                    <span class="material-icons text-xs mr-1">
+                                        {{ $order->status === 'completed' ? 'check_circle' : 'hourglass_empty'  }}
                                     </span>
+                                    {{ ucfirst($order->status) }}
+                                </span>
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap text-center">
                                     <button type="button" 
