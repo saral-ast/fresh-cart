@@ -1,66 +1,188 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+<div align="center">
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+# 🛒 Fresh Cart
 
-## About Laravel
+**A modern e-commerce platform for grocery and retail businesses**
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+<img src="public/images/freshcart-logo.svg" alt="Fresh Cart Logo" width="250">
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+[![Laravel](https://img.shields.io/badge/Laravel-v12.0-FF2D20?style=for-the-badge&logo=laravel&logoColor=white)](https://laravel.com)
+[![PHP](https://img.shields.io/badge/PHP-v8.2-777BB4?style=for-the-badge&logo=php&logoColor=white)](https://php.net)
+[![TailwindCSS](https://img.shields.io/badge/Tailwind-v4.0-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)](https://tailwindcss.com)
+[![Vite](https://img.shields.io/badge/Vite-Latest-646CFF?style=for-the-badge&logo=vite&logoColor=white)](https://vitejs.dev)
+[![License](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge)](https://opensource.org/licenses/MIT)
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+</div>
 
-## Learning Laravel
+## 📋 Overview
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+Fresh Cart is a comprehensive e-commerce solution built with Laravel, designed specifically for grocery and retail businesses. The platform combines powerful admin capabilities with an intuitive shopping experience, enabling businesses to manage their online presence efficiently while providing customers with a seamless shopping journey.
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+<div align="center">
+  <img src="public/images/grocery-banner.png" alt="Fresh Cart Banner" width="800">
+</div>
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+## ✨ Features
 
-## Laravel Sponsors
+### 🛍️ Customer Experience
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+- **User-friendly Authentication** - Simple registration and login process
+- **Intuitive Product Discovery** - Advanced search and category filtering
+- **Seamless Shopping** - Responsive cart functionality and streamlined checkout
+- **Order Management** - Real-time tracking and history
+- **Profile Customization** - Easy management of personal information and preferences
 
-### Premium Partners
+### 🔧 Admin Dashboard
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
+- **Comprehensive Analytics** - Real-time sales data and performance metrics
+- **Complete Product Control** - Full CRUD operations with image management
+- **Category Organization** - Hierarchical category structure management
+- **Order Processing** - Status updates and customer communication
+- **Customer Management** - User data and purchase history
+- **Role-based Access** - Customizable permissions system
+- **Content Management** - Static blocks and pages for marketing content
 
-## Contributing
+## 🚀 Technology Stack
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+- **Backend Framework**: Laravel 12.0
+- **PHP Version**: 8.2+
+- **Database Options**: MySQL/MariaDB/SQLite
+- **Frontend**: TailwindCSS 4.0, Vite
+- **Search Engine**: Laravel Scout with MeiliSearch
+- **JavaScript Libraries**: SweetAlert2
 
-## Code of Conduct
+## 📦 Requirements
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+- PHP 8.2 or higher
+- Composer
+- Node.js and NPM
+- MySQL/MariaDB or SQLite
 
-## Security Vulnerabilities
+## 🔧 Installation
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+### 1. Clone the repository
 
-## License
+```bash
+git clone <repository-url>
+cd fresh-cart
+```
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+### 2. Install PHP dependencies
+
+```bash
+composer install
+```
+
+### 3. Install JavaScript dependencies
+
+```bash
+npm install
+```
+
+### 4. Set up environment variables
+
+```bash
+cp .env.example .env
+php artisan key:generate
+```
+
+Edit the `.env` file to configure your database connection:
+
+```env
+DB_CONNECTION=mysql  # or sqlite, pgsql, sqlsrv
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=fresh_cart
+DB_USERNAME=root
+DB_PASSWORD=
+```
+
+### 5. Run database migrations and seeders
+
+```bash
+php artisan migrate --seed
+```
+
+### 6. Build frontend assets
+
+```bash
+npm run build
+```
+
+## 🚀 Running the Application
+
+### Development Mode
+
+Run the application with hot-reloading for development:
+
+```bash
+composer dev
+```
+
+This command will concurrently start:
+- Laravel development server
+- Queue worker
+- Vite development server
+
+Alternatively, you can run each service separately:
+
+```bash
+# Laravel server
+php artisan serve
+
+# Queue worker
+php artisan queue:work
+
+# Vite development server
+npm run dev
+```
+
+### Production Mode
+
+For production deployment:
+
+```bash
+npm run build
+php artisan config:cache
+php artisan route:cache
+php artisan view:cache
+```
+
+## 👥 User Accounts
+
+After running the seeders, the following accounts will be available:
+
+### Admin
+- **Email**: admin@example.com
+- **Password**: password
+
+### Customer
+- **Email**: user@example.com
+- **Password**: password
+
+## 📁 Project Structure
+
+```
+fresh-cart/
+├── app/                  # Core application code
+│   ├── Http/Controllers/ # Request handlers
+│   ├── Models/           # Database models
+│   └── Services/         # Business logic
+├── database/             # Migrations and seeders
+├── resources/            # Frontend assets and views
+└── routes/               # Application routes
+    ├── admin.php         # Admin panel routes
+    └── user.php          # Customer-facing routes
+```
+
+## 📝 License
+
+The Fresh Cart application is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+
+---
+
+<div align="center">
+
+**Built with ❤️ for modern e-commerce**
+
+</div>
