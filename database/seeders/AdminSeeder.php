@@ -18,7 +18,6 @@ class AdminSeeder extends Seeder
             "email"=> "admin@freshcart.com",
             "password"=> bcrypt("password"),
             "role_id"=> 1,
-            
         ]);
     }
 }
