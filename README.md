@@ -153,7 +153,7 @@ php artisan view:cache
 After running the seeders, the following accounts will be available:
 
 ### Admin
-- **Email**: admin@example.com
+- **Email**: admin@freshcart.com
 - **Password**: password
 
 ### Customer
